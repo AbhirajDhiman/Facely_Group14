@@ -1,4 +1,8 @@
 
+# SCM_CLASS_PROJECT
+📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving. 
+
+
 This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project in Software Configuration Management (SCM). The goal of this project is to develop an AI-powered face recognition application, applying our classroom learning to a real-world scenario. Our focus is on teamwork, code quality, version control, and problem-solving while implementing best practices in software development.
 
 Project Overview
@@ -14,3 +18,4 @@ Feature Extraction – The facial features are converted into embeddings using A
 Face Matching & Recognition – The extracted features are compared against a database of stored images.
 
 Result Display – The app returns the identity match or an "unknown" status if no match is found
+
