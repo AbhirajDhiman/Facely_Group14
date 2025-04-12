@@ -4,7 +4,7 @@
   "description": "📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving.",
   "main": "backend/index.js",
   "scripts": {
-    "dev":"nodemon backend/index.js"
+    "dev": "nodemon backend/index.js"
   },
   "repository": {
     "type": "git",
@@ -12,13 +12,14 @@
   },
   "keywords": [],
   "author": "",
-  "type":"module", 
+  "type": "module",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AbhirajDhiman/SCM_CLASS_PROJECT/issues"
   },
   "homepage": "https://github.com/AbhirajDhiman/SCM_CLASS_PROJECT#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
