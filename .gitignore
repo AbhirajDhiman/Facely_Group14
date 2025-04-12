@@ -1,11 +1,23 @@
+
 node_modules/
+
 .env
-dist/
+.env.*.local
+
 
 *.log
 
-client/node_modules/
-client/build/
-
 .DS_Store
 Thumbs.db
+
+/frontend/node_modules/
+/frontend/build/
+/frontend/dist/
+
+
+/backend/node_modules/
+/backend/dist/
+/backend/*.log
+
+
+.vscode/
