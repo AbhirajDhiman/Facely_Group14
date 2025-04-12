@@ -79,7 +79,7 @@ const SpiderAnimation = () => {
       let ky = rnd(0.5, 0.5);
       let walkRadius = pt(rnd(50, 50), rnd(50, 50));
       let r = window.innerWidth / rnd(100, 150);
-
+      
       function paintPt(pt) {
         pts2.forEach((pt2) => {
           if (!pt.len) return;
@@ -90,9 +90,10 @@ const SpiderAnimation = () => {
             y + pt2.y * r
           );
         });
-        drawCircle(pt.x, pt.y, pt.r);
+      
+        drawCircle(pt.x, pt.y, pt.r * 0.3); // 👈 Reduce this multiplier for a thinner center
       }
-
+      
       return {
         follow(mx, my) {
           tx = mx;
