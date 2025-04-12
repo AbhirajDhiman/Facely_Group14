@@ -6,17 +6,17 @@ dotenv.config();
 export const transport = Nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, // true for 465, false for other ports
+  secure: false,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASSWORD,
   },
   tls: {
-    rejectUnauthorized: false // Only for testing, remove in production
+    rejectUnauthorized: false 
   }
 });
 
 export const sender = {
-  address: process.env.GMAIL_USER, // Your Gmail address
-  name: "Jaskaran Singh", // Your sender name
+  address: process.env.GMAIL_USER, 
+  name: "Jaskaran Singh", 
 };
