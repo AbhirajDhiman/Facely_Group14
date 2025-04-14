@@ -1,0 +1,64 @@
+
+
+/* === Global Font Setup (you already imported Orbitron in index.css) === */
+body {
+    background-color: #0f172a; /* Dark futuristic tone */
+    color: white;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* === Scanner-style glowing line animation === */
+  .scanner-line {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(to right, #00ffff, #0ff, #00ffff);
+    animation: scan 2s infinite linear;
+    box-shadow: 0 0 10px #00ffff;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes scan {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  /* === Glowing border around card/form === */
+  .glow-border {
+    border: 2px solid #0ff;
+    box-shadow: 0 0 8px #0ff, 0 0 20px #0ff inset;
+    border-radius: 12px;
+  }
+  
+  /* === Optional: Glass panel effect for futuristic UI === */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 255, 255, 0.1);
+    border-radius: 16px;
+  }
+  
+  /* === Futuristic button with hover effects === */
+  .futuristic-button {
+    background-color: #0ff;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #0ff;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .futuristic-button:hover {
+    background-color: #00e5e5;
+    box-shadow: 0 0 15px #00e5e5, 0 0 30px #00e5e5;
+    transform: scale(1.03);
+  }
+  
