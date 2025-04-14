@@ -1,3 +1,20 @@
+# Python __pycache__ and compiled files
+**/__pycache__
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv*/     
+ml-services/venv_py39
+ml-services/.python-version      
+ml-services/app/__pycache__/
+# Flask instance folder (if used)
+instance/
+
+
+
+ml-services/app/__pycache__/__init__.cpython-313.pyc
+ml-services/app/__pycache__/routes.cpython-313.pyc
 
 node_modules/
 
