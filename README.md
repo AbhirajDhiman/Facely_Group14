@@ -1,21 +1,24 @@
+FACELY
+FACELY is a collaborative project by Abhiraj, Jaskaran, and Versha, developed as part of our Software Configuration Management (SCM) course. This project aims to bridge classroom concepts with real-world application development, focusing on AI-powered facial recognition. It emphasizes teamwork, code quality, version control, and problem-solving, while adhering to best practices in modern software development.
 
-# SCM_CLASS_PROJECT
-📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving. 
+🚀 Project Overview
+FACELY is an intelligent facial recognition system that enables users to upload a photo for identity verification or recognition. Using AI and computer vision techniques, the system analyzes facial features and compares them to a database of stored images.
+
+🔍 How the App Works
+📤 User Photo Upload
+Users upload their image through the web interface.
+
+🧠 Face Detection
+The system detects faces in the uploaded image using OpenCV or deep learning-based models.
+
+🧬 Feature Extraction
+Facial features are extracted and converted into vector embeddings using AI models.
+
+🔗 Face Matching & Recognition
+The embeddings are compared with those in the database to identify or verify individuals.
+
+📲 Result Display
+The app displays the identity if a match is found, or returns an "Unknown" status if no match exists.
 
 
-This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project in Software Configuration Management (SCM). The goal of this project is to develop an AI-powered face recognition application, applying our classroom learning to a real-world scenario. Our focus is on teamwork, code quality, version control, and problem-solving while implementing best practices in software development.
-
-Project Overview
-The AI Face Recognizer is an application that allows users to upload their photo, which is then processed using AI-powered facial recognition. The system extracts facial features and compares them against stored images to identify or verify individuals.
-
-How the App Works
-User Photo Upload – Users upload their image via the app.
-
-Face Detection – The system detects faces in the image using OpenCV or deep learning models.
-
-Feature Extraction – The facial features are converted into embeddings using AI models.
-
-Face Matching & Recognition – The extracted features are compared against a database of stored images.
-
-Result Display – The app returns the identity match or an "unknown" status if no match is found
 
