@@ -1,4 +1,4 @@
-FACELY
+#FACELY
 FACELY is a collaborative project by Abhiraj, Jaskaran, and Versha, developed as part of our Software Configuration Management (SCM) course. This project aims to bridge classroom concepts with real-world application development, focusing on AI-powered facial recognition. It emphasizes teamwork, code quality, version control, and problem-solving, while adhering to best practices in modern software development.
 
 🚀 Project Overview
