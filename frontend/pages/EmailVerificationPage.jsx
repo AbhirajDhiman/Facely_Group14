@@ -106,3 +106,4 @@ const EmailVerificationPage = () => {
 	);
 };
 export default EmailVerificationPage;
+// added new page
