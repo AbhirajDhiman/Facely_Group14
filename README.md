@@ -33,7 +33,6 @@ The application displays the matched identity and retrieves all corresponding im
 
 
 
-.
 
 
 

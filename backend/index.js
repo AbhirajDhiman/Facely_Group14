@@ -18,9 +18,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser()); //allow us to access the cookie 
+// In index.js
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
+  origin: 'http://localhost:5173', // Confirm this is set to 5173
+  credentials: true
 }));
 
 app.use("/api/auth", authRoutes) 
@@ -28,5 +29,5 @@ app.use("/api/auth", authRoutes)
 
 app.listen(PORT, () => {
     connectDB();
-    console.log('Server running on port 5000')
+    console.log(`Server running on port ${PORT}`)
 }); 
