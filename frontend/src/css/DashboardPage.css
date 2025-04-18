@@ -1,0 +1,61 @@
+.dashboard-container {
+    max-width: 28rem;
+    width: 100%;
+    margin: 2.5rem auto 0;
+    padding: 2rem;
+    background-color: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(31, 41, 55, 1);
+  }
+  
+  .dashboard-heading {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background-image: linear-gradient(to right, #4ade80, #059669);
+    color: transparent;
+    background-clip: text;
+  }
+  
+  .info-card {
+    padding: 1rem;
+    background-color: rgba(31, 41, 55, 0.5);
+    border-radius: 0.5rem;
+    border: 1px solid rgba(55, 65, 81, 1);
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4ade80;
+    margin-bottom: 0.75rem;
+  }
+  
+  .info-text {
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+  }
+  
+  .logout-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-image: linear-gradient(to right, #22c55e, #059669);
+    color: white;
+    font-weight: 700;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  
+  .logout-button:hover {
+    background-image: linear-gradient(to right, #16a34a, #047857);
+  }
+  
+  .logout-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #22c55e, 0 0 0 4px rgba(34, 197, 94, 0.5);
+  }

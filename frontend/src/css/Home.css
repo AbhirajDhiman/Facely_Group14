@@ -1,0 +1,63 @@
+.home-container {
+    background-color: #f3f4f6;
+    min-height: 100vh;
+    padding: 3rem 1.5rem;
+  }
+  
+  .content-card {
+    max-width: 56rem;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+  }
+  
+  .heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+  
+  .lead-text {
+    color: #4b5563;
+    font-size: 1.125rem;
+    text-align: center;
+    line-height: 1.6;
+  }
+  
+  .section {
+    margin-top: 2rem;
+  }
+  
+  .section-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-list {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    color: #4b5563;
+    font-size: 1.125rem;
+  }
+  
+  .feature-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  
+  .contact-section {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .contact-email {
+    color: #1f2937;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
