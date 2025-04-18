@@ -1,4 +1,4 @@
-.app-container {
+.loading-container {
     min-height: 100vh;
     background: linear-gradient(
       135deg,
@@ -11,4 +11,12 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+  }
+  
+  .loading-spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 4px solid #bbf7d0;  /* border-green-200 */
+    border-top: 4px solid #22c55e;  /* border-t-green-500 */
+    border-radius: 9999px;
   }

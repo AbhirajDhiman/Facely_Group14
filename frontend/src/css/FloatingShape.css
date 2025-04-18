@@ -1,0 +1,6 @@
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.2;
+    filter: blur(12px);
+  }
