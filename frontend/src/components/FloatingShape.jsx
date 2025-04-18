@@ -1,13 +1,17 @@
-import React from 'react'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { motion } from 'framer-motion';
+import '../css/FloatingShape.css';
 
 const FloatingShape = ({ color, size, top, left, delay }) => {
   return (
     <motion.div
-      className={`absolute rounded-full opacity-20 blur-xl ${size} ${color}`}
+      className="floating-shape"
       style={{
-        top, 
-        left 
+        top,
+        left,
+        width: size,
+        height: size,
+        backgroundColor: color,
       }}
       animate={{
         y: ["0%", "100%", "0%"],
@@ -22,7 +26,7 @@ const FloatingShape = ({ color, size, top, left, delay }) => {
       }}
       aria-hidden="true"
     />
-  )
-}
+  );
+};
 
 export default FloatingShape;
