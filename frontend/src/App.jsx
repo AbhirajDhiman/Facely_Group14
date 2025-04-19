@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import Home from "./pages/Home";
 import "./App.css";
 import Upload from "./pages/Upload";
+import PreviewPage from "./pages/PreviewPage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -93,6 +94,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Upload />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/preview'
+          element={
+            <ProtectedRoute>
+              <PreviewPage />
             </ProtectedRoute>
           }
         />
