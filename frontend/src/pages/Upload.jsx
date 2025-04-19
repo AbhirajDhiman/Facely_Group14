@@ -3,6 +3,7 @@ import '../css/DragDropPage.css';
 import { zipToFiles } from '../deepface/ZipfileConverter';
 import DropZone from '../components/DropZone';
 import JSZip from 'jszip';
+import CircularProgressWithLabel from '../components/Loader';
 
 function Upload() {
   const [isLeftLoading, setIsLeftLoading] = useState(false);
@@ -196,6 +197,7 @@ function Upload() {
         Upload and filter your face among others online.
       </p>
       <div className="content-container">
+      {isFiltering ? <CircularProgressWithLabel style={{ color: '#10b981' }} size={150} value={progress} /> :
         <div className="drop-zones-container">
           <div className="left-drop-zone">
             <DropZone
@@ -262,13 +264,9 @@ function Upload() {
               defaultMessage="Drag a single image here or click to select"
             />
           </div>
-        </div>
+        </div>}
 
-        {isFiltering && (
-          <div className="progress-container">
-            <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-          </div>
-        )}
+
 
         <button
           className="filter-button"
