@@ -1,63 +1,67 @@
-.home-container {
-    background-color: #f3f4f6;
-    min-height: 100vh;
-    padding: 3rem 1.5rem;
-  }
-  
-  .content-card {
-    max-width: 56rem;
-    margin: 0 auto;
-    background-color: white;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    border-radius: 1rem;
-    padding: 2rem;
-  }
-  
-  .heading {
-    font-size: 2.25rem;
-    font-weight: 700;
+
+  .content-container {
     text-align: center;
-    color: #1f2937;
-    margin-bottom: 1.5rem;
+    color: #ffffff;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 20px;
   }
   
-  .lead-text {
-    color: #4b5563;
-    font-size: 1.125rem;
-    text-align: center;
-    line-height: 1.6;
-  }
-  
-  .section {
-    margin-top: 2rem;
-  }
-  
-  .section-heading {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #374151;
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
     margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
   
-  .feature-list {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    color: #4b5563;
-    font-size: 1.125rem;
-  }
-  
-  .feature-list li {
-    margin-bottom: 0.5rem;
+  .description {
+    font-size: 1.1rem;
     line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
   }
   
-  .contact-section {
-    text-align: center;
-    margin-top: 2rem;
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
   }
   
-  .contact-email {
-    color: #1f2937;
-    font-weight: 600;
-    margin-top: 0.5rem;
+  .cta-button {
+    background-color: #10b981; /* emerald-500 */
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+  }
+  
+  .cta-button:hover {
+    background-color: #059669; /* emerald-600 */
+    transform: scale(1.05);
+  }
+  
+  .cta-button:active {
+    transform: scale(0.95);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 480px) {
+    .title {
+      font-size: 2rem;
+    }
+  
+    .description {
+      font-size: 1rem;
+    }
+  
+    .cta-button {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+    }
   }
