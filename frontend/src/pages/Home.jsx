@@ -1,56 +1,24 @@
-import React from "react";
-import "../css/Home.css";
+import React from 'react';
+import '../css/Home.css';
+import { Link } from 'react-router-dom'; // For navigation (optional, if using react-router)
 
-const Home = () => {
+function HomePage() {
   return (
     <div className="home-container">
-      <div className="content-card">
-        <h1 className="heading">
-          About Us
-        </h1>
-        <p className="lead-text">
-          Welcome to <strong>Animal MarketPlace</strong>, your one-stop destination for
-          buying and selling animals, pet products, and veterinary support. Our
-          mission is to connect animal lovers with trusted sellers while
-          ensuring the best care for their pets and livestock.
+      <div className="content-container">
+        <h1 className="title">Welcome to Image Filter</h1>
+        <p className="description">
+          Effortlessly filter and manage your images from Google Drive, uploaded folders, or zip files. 
+          Organize your photos by metadata, tags, or content with our intuitive tools.
         </p>
-
-        <div className="section">
-          <h2 className="section-heading">
-            🐾 What We Offer:
-          </h2>
-          <ul className="feature-list">
-            <li>Wide range of animals for sale – pets, livestock, and exotic breeds</li>
-            <li>High-quality pet and farm products</li>
-            <li>Verified sellers for a trustworthy experience</li>
-            <li>24/7 veterinary consultation and support</li>
-          </ul>
-        </div>
-
-        <div className="section">
-          <h2 className="section-heading">
-            ❤️ Our Mission:
-          </h2>
-          <p className="lead-text">
-            We aim to create a <strong>safe, ethical, and transparent</strong> marketplace
-            where animal lovers can find the perfect companions, farm animals,
-            and essential products while promoting responsible pet ownership and
-            care.
-          </p>
-        </div>
-
-        <div className="contact-section">
-          <h2 className="section-heading">
-            📩 Contact Us
-          </h2>
-          <p className="lead-text">
-            Have questions? Reach out to us at:
-          </p>
-          <p className="contact-email">support@animalmarket.com</p>
+        <div className="button-container">
+          <Link to="/upload" className="cta-button">Upload Images</Link>
+          <Link to="/connect-drive" className="cta-button">Connect Google Drive</Link>
+          <Link to="/gallery" className="cta-button">View Gallery</Link>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default Home;
+export default HomePage;
