@@ -1,5 +1,6 @@
-<h1><b>#FACELY</</b></h1>
-FACELY is a collaborative project by Abhiraj, Jaskaran, and Versha, developed as part of our Software Configuration Management (SCM) course. This project bridges classroom learning with real-world application development, focusing on AI-powered facial recognition. It highlights team collaboration, code quality, version control, and problem-solving, while following industry best practices in software development.
+
+# Facely
+📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving. 
 
 
 🚀 Project Overview

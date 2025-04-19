@@ -3,8 +3,12 @@ import '../css/DragDropPage.css';
 import { zipToFiles } from '../deepface/ZipfileConverter';
 import DropZone from '../components/DropZone';
 import JSZip from 'jszip';
+import CircularProgressWithLabel from '../components/Loader';
+import { useNavigate } from 'react-router-dom';
 
 function Upload() {
+  const navigate = useNavigate();
+
   const [isLeftLoading, setIsLeftLoading] = useState(false);
   const [leftFiles, setLeftFiles] = useState([]);
   const [leftName, setLeftName] = useState(null);
@@ -162,28 +166,24 @@ function Upload() {
         setProgress((processedFiles / totalFiles) * 100);
       }
 
+
       // Create ZIP file with matching images
-      const zip = new JSZip();
-      matchingFiles.forEach((file, index) => {
-        zip.file(`match_${index + 1}_${file.name}`, file);
-      });
-
-      const zipBlob = await zip.generateAsync({ type: "blob" });
-
-      // Trigger download
-      const url = window.URL.createObjectURL(zipBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'filtered_images.zip');
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const matchingFileURLs = matchingFiles.map(file => ({
+        name: file.name,
+        url: URL.createObjectURL(file),
+      }));
+      setIsFiltering(false);
+      setProgress(0);
+      navigate('/preview', {
+        state: {
+          files: matchingFileURLs,
+        }}
+      );
     } catch (err) {
       console.error("Error processing files:", err);
     }
 
-    setIsFiltering(false);
-    setProgress(0);
+    
   };
 
   return (
@@ -196,6 +196,7 @@ function Upload() {
         Upload and filter your face among others online.
       </p>
       <div className="content-container">
+      {isFiltering ? <CircularProgressWithLabel style={{ color: '#10b981' }} size={150} value={progress} /> :
         <div className="drop-zones-container">
           <div className="left-drop-zone">
             <DropZone
@@ -262,13 +263,9 @@ function Upload() {
               defaultMessage="Drag a single image here or click to select"
             />
           </div>
-        </div>
+        </div>}
 
-        {isFiltering && (
-          <div className="progress-container">
-            <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-          </div>
-        )}
+
 
         <button
           className="filter-button"

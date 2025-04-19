@@ -107,3 +107,7 @@ input[type="submit"]:hover {
   flex: 1 1 200px;
   margin: 0.5rem;
 }
+.css-1374baf-MuiTypography-root{
+  font-size: 25px !important;
+  color: white !important ;
+}
