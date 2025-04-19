@@ -1,157 +1,134 @@
+.content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 1320px;
+  min-height: 500px;
+  text-align: center;
+  color: #059669 #ffffff;
+  padding: 20px;
+  margin: 0 20px;
+}
 
-  
-  .content-container {
-    display: flex;
+.drop-zones-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.left-drop-zone,
+.right-drop-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drop-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #ffffff50;
+  padding: 18% 0 20% 0;
+  width: 100%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Rest of the original CSS remains unchanged */
+.drop-zone:hover {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.drop-zone.active {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+  transform: scale(1.02);
+}
+
+.uploaded-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.folder-icon {
+  margin-bottom: 10px;
+}
+
+.folder-icon svg {
+  transition: transform 0.3s ease;
+}
+
+.folder-icon svg:hover {
+  transform: scale(1.1);
+}
+
+.reset-button {
+  background-color: transparent;
+  color: #10b981;
+  border: 1px solid #10b981;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.reset-button:hover {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.file-count {
+  margin: 15px 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.filter-button {
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.filter-button:hover:not(:disabled) {
+  background-color: #059669;
+  transform: scale(1.05);
+}
+
+.filter-button:disabled {
+  background-color: #6b7280;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .drop-zones-container {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-width: 1320px;
-    min-height: 500px;
-    /* width: 100%; */
-    text-align: center;
-    color: #059669 #ffffff;
-    padding: 20px;
-    margin: 0 20px;
   }
-  
-  .drop-zone {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px dashed #ffffff50;
-    padding: 18% 0 20% 0;
+
+  .left-drop-zone,
+  .right-drop-zone {
     width: 100%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
   }
-  
-  .drop-zone:hover {
-    border-color: #10b981;
-    background-color: rgba(16, 185, 129, 0.1);
+
+  .drop-zone {
+    padding: 10% 0;
   }
-  
-  .drop-zone.active {
-    border-color: #10b981;
-    background-color: rgba(16, 185, 129, 0.1);
-    transform: scale(1.02);
-  }
-  
-  .loader {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .spinner {
-    border: 4px solid #ffffff50;
-    border-top: 4px solid #10b981;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .uploaded-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .folder-icon {
-    margin-bottom: 10px;
-  }
-  
-  .folder-icon svg {
-    transition: transform 0.3s ease;
-  }
-  
-  .folder-icon svg:hover {
-    transform: scale(1.1);
-  }
-  
-  .reset-button {
-    background-color: transparent;
-    color: #10b981;
-    border: 1px solid #10b981;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .reset-button:hover {
-    background-color: #10b981;
-    color: #ffffff;
-  }
-  
-  .file-count {
-    margin: 15px 0;
-    font-size: 1rem;
-    opacity: 0.9;
-  }
-  
-  .filter-button {
-    background-color: #10b981; /* emerald-500 */
-    color: #ffffff;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 20px;
-  }
-  
-  .filter-button:hover:not(:disabled) {
-    background-color: #059669; /* emerald-600 */
-    transform: scale(1.05);
-  }
-  
-  .filter-button:active:not(:disabled) {
-    transform: scale(0.95);
-  }
-  
-  .filter-button:disabled {
-    background-color: #6b7280; /* gray-500 */
-    cursor: not-allowed;
-    transform: none;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 480px) {
-    .drop-zone {
-      padding: 20px;
-      font-size: 1rem;
-    }
-  
-    .filter-button {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.9rem;
-    }
-  
-    .file-count {
-      font-size: 0.9rem;
-    }
-  
-    .reset-button {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-    }
-  
-    .spinner {
-      width: 24px;
-      height: 24px;
-    }
-  }
+}

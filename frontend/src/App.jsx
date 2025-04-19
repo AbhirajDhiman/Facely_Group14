@@ -12,7 +12,7 @@ import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
 import Home from "./pages/Home";
 import "./App.css";
-import UnzipPage from "./pages/UnzipPage";
+import Upload from "./pages/Upload";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -32,7 +32,7 @@ const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (isAuthenticated && user.isVerified) {
-    return <Navigate to='/unzip' replace />;
+    return <Navigate to='/upload' replace />;
   }
 
   return children;
@@ -89,10 +89,10 @@ function App() {
           }
         />
         <Route
-          path='/unzip'
+          path='/upload'
           element={
             <ProtectedRoute>
-              <UnzipPage />
+              <Upload />
             </ProtectedRoute>
           }
         />
@@ -129,7 +129,7 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
-        <Route path='*' element={<Navigate to='/unzip' replace />} />
+        <Route path='*' element={<Navigate to='/upload' replace />} />
       </Routes>
       <Toaster />
     </div>
