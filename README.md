@@ -3,19 +3,37 @@
 📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving. 
 
 
-This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project in Software Configuration Management (SCM). The goal of this project is to develop an AI-powered face recognition application, applying our classroom learning to a real-world scenario. Our focus is on teamwork, code quality, version control, and problem-solving while implementing best practices in software development.
+🚀 Project Overview
+FACELY is an intelligent facial recognition system that allows users to upload a photo for identity verification or recognition. By leveraging AI and computer vision, the system analyzes facial features and compares them to a database of stored images.
 
-Project Overview
-The AI Face Recognizer is an application that allows users to upload their photo, which is then processed using AI-powered facial recognition. The system extracts facial features and compares them against stored images to identify or verify individuals.
+🔎 Practical Use Cases
+👨‍💼 In an organization:
+Want to check all events or security footage where a specific employee appears? Upload their photo and FACELY will retrieve all instances across the dataset.
 
-How the App Works
-User Photo Upload – Users upload their image via the app.
+🎉 At a function or event:
+Looking for all pictures where you were captured during a college fest or corporate event? Just upload your image to find all related photos.
 
-Face Detection – The system detects faces in the image using OpenCV or deep learning models.
+🛠️ In a hackathon or team project:
+Need to gather all images you're featured in for a report or social post? FACELY makes it simple—upload one photo, and it fetches the rest.
 
-Feature Extraction – The facial features are converted into embeddings using AI models.
+🔍 How the App Works
+📤 User Photo Upload
+Users upload an image via the web interface.
 
-Face Matching & Recognition – The extracted features are compared against a database of stored images.
+🧠 Face Detection
+The system detects faces in the uploaded image.
 
-Result Display – The app returns the identity match or an "unknown" status if no match is found
+🧬 Feature Extraction
+Facial features are extracted.
+
+🔗 Face Matching & Recognition
+The system compares the uploaded face embeddings with those stored in the database to find matches.
+
+📲 Result Display
+The application displays the matched identity and retrieves all corresponding images. If no match is found, it returns an "Unknown" status.
+
+
+
+
+
 
