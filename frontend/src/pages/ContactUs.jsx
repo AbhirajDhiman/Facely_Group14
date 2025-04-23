@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./css/ContactUs.css";
-
+// contact us page matching the themee
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: "",
