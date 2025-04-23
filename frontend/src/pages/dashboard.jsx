@@ -46,5 +46,5 @@ const FacelyDashboard = () => {
     </div>
   );
 };
-
+// added the css file separatly here to link it with the dashboardD
 export default FacelyDashboard;
