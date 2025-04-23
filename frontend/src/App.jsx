@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import "./App.css";
 import Upload from "./pages/Upload";
 import PreviewPage from "./pages/PreviewPage";
+import About from "./pages/About";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -95,6 +96,12 @@ function App() {
             <ProtectedRoute>
               <Upload />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/about'
+          element={
+              <About />
           }
         />
         <Route
