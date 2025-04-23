@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/BlogPage.css';
-
+// added a blog page 
 const BlogPage = () => {
   return (
     <div className="app-container">
