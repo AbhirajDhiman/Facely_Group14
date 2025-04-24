@@ -16,19 +16,23 @@ import Upload from "./pages/Upload";
 import PreviewPage from "./pages/PreviewPage";
 import About from "./pages/About";
 
+
+import Sidebar from "./components/Sidebar"; // Adjust the import path as necessary
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to='/login' replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (!user.isVerified) {
-    return <Navigate to='/verify-email' replace />;
+    return <Navigate to="/verify-email" replace />;
   }
 
-  return children;
+  return <> <Sidebar/>{children}</>;
 };
+
 
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -50,6 +54,7 @@ function App() {
   if (isCheckingAuth) return <LoadingSpinner />;
 
   return (
+<>
     <div className="app-container">
       <FloatingShape 
         color="#22c55e"    /* bg-green-500 */
@@ -149,6 +154,7 @@ function App() {
       </Routes>
       <Toaster />
     </div>
+    </>
   );
 }
 
