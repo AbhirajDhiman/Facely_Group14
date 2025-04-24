@@ -9,7 +9,7 @@ import { sendForgotPasswordEmail, sendResetSuccessfully, sendVerificationEmail, 
 const signup = async (req, res) => {
 
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, profilePic } = req.body;
         if (!name || !email || !password) {
             throw new Error('All fields are required');
         }
@@ -23,6 +23,7 @@ const signup = async (req, res) => {
         const user = new User({
             email,
             password: hashedPassword,
+            profilePic,
             name,
             verificationToken,
             verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)

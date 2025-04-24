@@ -77,3 +77,88 @@
   .animate-spin {
     animation: spin 1s linear infinite;
   }
+  /* Profile Picture Section Styles */
+.profile-pic-section {
+  margin-bottom: 1.5rem;
+}
+
+.profile-pic-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #374151;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-pic-label:hover {
+  border-color: #4ade80;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.profile-pic-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4ade80;
+}
+
+.profile-pic-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+}
+
+.profile-pic-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.profile-pic-input {
+  display: none;
+}
+
+/* Password Strength Meter Adjustments */
+.password-strength-meter {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.strength-bar {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.bar-segment {
+  flex: 1;
+  height: 4px;
+  background-color: #374151;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.bar-segment.active {
+  background-color: #4ade80;
+}
+
+.strength-text {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+/* Error Message Styling */
+.error-message {
+  color: #ef4444;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  text-align: center;
+}
