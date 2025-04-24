@@ -4,7 +4,9 @@
   "description": "📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving.",
   "main": "backend/index.js",
   "scripts": {
-    "dev": "nodemon backend/index.js"
+    "dev": "NODE_ENV=developement nodemon backend/index.js",
+    "start": "NODE_ENV=production node backend/index.js",
+    "build": "npm install && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
