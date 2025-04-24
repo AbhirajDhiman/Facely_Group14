@@ -15,19 +15,26 @@ export const useAuthStore = create((set) => ({
 	isCheckingAuth: true,
 	message: null,
 
-	signup: async (email, password, name) => {
-        console.log(API_URL, email, password, name);
+	signup: async (formData) => {
 		set({ isLoading: true, error: null });
 		try {
-			const response = await axios.post(`${API_URL}/signup`, { email, password, name },{
-                withCredentials: true
-            });
-			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
+		  const response = await axios.post(`${API_URL}/signup`, formData, {
+			headers: {
+			  "Content-Type": "multipart/form-data",
+			},
+			withCredentials: true,
+		  });
+	  
+		  set({ user: response.data.user, isAuthenticated: true, isLoading: false });
 		} catch (error) {
-			set({ error: error.response.data.message || "Error signing up", isLoading: false });
-			throw error;
+		  set({
+			error: error.response?.data?.message || "Error signing up",
+			isLoading: false,
+		  });
+		  throw error;
 		}
-	},
+	  },
+	  
 	login: async (email, password) => {
 		set({ isLoading: true, error: null });
 		try {

@@ -18,6 +18,8 @@ const app = express();
 
 
 
+
+
 app.use(express.json());
 app.use(cookieParser()); //allow us to access the cookie 
 // In index.js

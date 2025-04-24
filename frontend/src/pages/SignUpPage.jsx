@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Input from "../components/Input";
 import { Loader, Lock, Mail, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
 import { useAuthStore } from "../store/authStore";
@@ -11,18 +11,43 @@ const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const navigate = useNavigate();
   const { signup, error, isLoading } = useAuthStore();
+
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await signup(email, password, name);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("profilePic", profilePic); // profilePic should be a File object
+  
+      await signup(formData);
       navigate("/verify-email");
     } catch (error) {
-      // Error handling
+      // Error is handled by authStore
     }
   };
+  
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   return (
     <motion.div
@@ -35,6 +60,25 @@ const SignUpPage = () => {
         <h2 className="signup-heading">Create Account</h2>
 
         <form onSubmit={handleSignUp}>
+          <div className="profile-pic-section">
+            <label htmlFor="profilePic" className="profile-pic-label">
+              {previewUrl ? (
+                <img src={previewUrl} alt="Profile Preview" className="profile-pic-preview" />
+              ) : (
+                <div className="profile-pic-placeholder">
+                  <User size={24} className="profile-pic-icon" />
+                  <p>Add Profile Picture</p>
+                </div>
+              )}
+            </label>
+            <input
+              type="file"
+              id="profilePic"
+              className="profile-pic-input"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+            />
+          </div>
           <Input
             icon={User}
             type="text"

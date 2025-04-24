@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import uploadToCloudinary from "../cloudinary/uploadToCloudinary.js";
 
 
 import { User } from "../models/user.model.js";
@@ -7,49 +8,50 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import { sendForgotPasswordEmail, sendResetSuccessfully, sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
 
 const signup = async (req, res) => {
-
     try {
-        const { name, email, password, profilePic } = req.body;
-        if (!name || !email || !password) {
-            throw new Error('All fields are required');
-        }
-        const userExist = await User.findOne({ email });
-        if (userExist) throw new Error('User already exists');
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString(); //verification token
-
-        const user = new User({
-            email,
-            password: hashedPassword,
-            profilePic,
-            name,
-            verificationToken,
-            verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
-        })
-
-        await user.save();
-
-        // jwt
-        generateTokenAndSetCookie(res, user._id);
-
-        await sendVerificationEmail(user.email, verificationToken);
-
-        res.status(201).json({
-            success: true,
-            message: 'User created successfully',
-            user: {
-                ...user._doc,
-                password: undefined,
-            }
-        });
-
+      const { name, email, password } = req.body;
+      if (!name || !email || !password) {
+        throw new Error("All fields are required");
+      }
+      console.log(res.file);
+  
+      const userExist = await User.findOne({ email });
+      console.log(userExist);
+      if (userExist) throw new Error("User already exists");
+  
+      let profilePicUrl = "";
+      if (req.file) {
+        profilePicUrl = await uploadToCloudinary(req.file.path);
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+  
+      const user = new User({
+        name,
+        email,
+        password: hashedPassword,
+        profilePic: profilePicUrl,
+        verificationToken,
+        verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+  
+      await user.save();
+      generateTokenAndSetCookie(res, user._id);
+      await sendVerificationEmail(user.email, verificationToken);
+  
+      res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        user: {
+          ...user._doc,
+          password: undefined,
+        },
+      });
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+      res.status(400).json({ success: false, message: error.message });
     }
-}
-
+  };
 const verifyEmail = async (req, res) => {
     const { code } = req.body;
     try {
