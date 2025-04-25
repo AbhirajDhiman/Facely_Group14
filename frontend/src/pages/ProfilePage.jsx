@@ -25,7 +25,6 @@ const ProfilePage = () => {
           <li>MongoDB, PostgreSQL</li>
           <li>Git & GitHub</li>
         </ul>
-
         <h2>Interests</h2>
         <p>
           When I'm not coding, I enjoy reading about psychology, working out,
