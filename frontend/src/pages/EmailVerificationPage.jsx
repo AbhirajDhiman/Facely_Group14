@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import toast from "react-hot-toast";
 import "../css/EmailVerificationPage.css";
-
 const EmailVerificationPage = () => {
 	const [code, setCode] = useState(["", "", "", "", "", ""]);
 	const inputRefs = useRef([]);
