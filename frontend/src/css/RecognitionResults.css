@@ -1,0 +1,77 @@
+.results-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    justify-items: center;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  @media (min-width: 768px) {
+    .results-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .image-section {
+    text-align: center;
+  }
+  
+  .section-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .image-box {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .confidence-text {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .button-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+  }
+  
+  .retry-btn {
+    background-color: #2563eb;
+    color: white;
+  }
+  
+  .retry-btn:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .back-btn {
+    background-color: #6b7280;
+    color: white;
+  }
+  
+  .back-btn:hover {
+    background-color: #4b5563;
+  }
+  
