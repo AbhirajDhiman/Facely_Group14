@@ -32,12 +32,10 @@ const ProfilePage = () => {
           and creating motivational content on YouTube.
         </p>
       </div>
-
       <footer>
         &copy; {new Date().getFullYear()} John Doe. All rights reserved.
       </footer>
     </>
   );
 };
-
 export default ProfilePage;
