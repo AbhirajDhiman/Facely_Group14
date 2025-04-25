@@ -8,6 +8,7 @@ import { connectDB } from './db/connectDB.js';
 
 
 import authRoutes from './routes/auth.routes.js';
+import galleryRoutes from './routes/gallery.routes.js';
 
 configDotenv();
 
@@ -37,6 +38,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes) 
+app.use("/api/gallery",galleryRoutes ) 
 
 
 
