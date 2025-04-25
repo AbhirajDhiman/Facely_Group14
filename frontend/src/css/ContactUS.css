@@ -1,10 +1,11 @@
 .contact-container {
     min-height: 100vh;
+    /* this is the bacakground css */
     background: linear-gradient(
       135deg,
-      #111827, /* from-gray-900 */
-      #14532d, /* via-green-900 */
-      #064e3b /* to-emerald-900 */
+      #111827, 
+      #14532d, 
+      #064e3b 
     );
     display: flex;
     justify-content: center;
