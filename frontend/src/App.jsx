@@ -18,6 +18,7 @@ import About from "./pages/About";
 
 
 import Sidebar from "./components/Sidebar"; // Adjust the import path as necessary
+import Gallery from "./pages/Gallery";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -84,6 +85,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/gallery'
+          element={
+            <ProtectedRoute>
+              <Gallery />
             </ProtectedRoute>
           }
         />
