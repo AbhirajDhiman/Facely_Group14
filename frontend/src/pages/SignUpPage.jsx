@@ -23,7 +23,6 @@ const SignUpPage = () => {
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
-
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
