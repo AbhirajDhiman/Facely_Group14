@@ -17,19 +17,23 @@ import PreviewPage from "./pages/PreviewPage";
 import About from "./pages/About";
 
 
-import Sidebar from "./components/Sidebar"; // Adjust the import path as necessary
+import Sidebar from "./components/Sidebar"; 
 import Gallery from "./pages/Gallery";
+import RecognitionResults from "./pages/recognition";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
+
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
+
   if (!user.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
+  
 
   return <> <Sidebar/>{children}</>;
 };
@@ -85,6 +89,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/recognition'
+          element={
+            <ProtectedRoute>
+              <RecognitionResults />
             </ProtectedRoute>
           }
         />

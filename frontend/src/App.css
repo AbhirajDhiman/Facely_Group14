@@ -12,3 +12,22 @@
     position: relative;
     overflow: hidden;
   }
+  .drive-image-loader input[type="url"] {
+    width: 400px;
+    padding: 8px;
+    margin-right: 10px;
+  }
+  
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .image-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+  }

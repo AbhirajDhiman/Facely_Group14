@@ -1,14 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import JSZip from 'jszip';
 import { useLocation } from 'react-router-dom';
 import '../css/PreviewPage.css';
+import { set } from 'mongoose';
+import { Loader } from 'lucide-react';
+import axios from 'axios';
 
 function PreviewPage() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(()=>{
+    setIsDone(false);
+  }, [currentIndex]);
   const location = useLocation();
   const files = location.state?.files || [];
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+
+  const handleSaveToGallery = async () => {
+    setIsLoading(true);
+    const currentFile = files[currentIndex];
+    try {
+      // Fetch the image blob from the URL
+      const response = await fetch(currentFile.url);
+      const blob = await response.blob();
+      
+      // Create FormData and append the image
+      const formData = new FormData();
+      formData.append('picture', blob, currentFile.name);
+
+      const result = await axios.post('http://localhost:5001/api/gallery/upload-pic', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true
+      });
+      setIsDone(true);
+      setIsLoading(false);
+      
+      console.log('Image ready for upload:', formData);
+      
+    } catch (error) {
+      console.error('Error preparing image:', error);
+    }
+  };
 
   const handleDownloadZip = async () => {
     const zip = new JSZip();
@@ -63,6 +99,13 @@ function PreviewPage() {
             <img src={files[currentIndex].url} alt={files[currentIndex].name} className="modal-image" />
             <div className="modal-controls">
               <button onClick={() => changeImage(-1)}>⟨</button>
+              <button onClick={handleSaveToGallery}>
+              {isDone? "Saved to gallery" : isLoading ? (
+              <Loader className="animate-spin" size={24} style={{ margin: '0 auto' }} />
+            ) : (
+              "Save to galley"
+            )}
+              </button>
               <button onClick={() => changeImage(1)}>⟩</button>
             </div>
           </div>

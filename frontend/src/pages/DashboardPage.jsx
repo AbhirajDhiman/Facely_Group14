@@ -1,14 +1,16 @@
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import { formatDate } from "../utils/date";
+import { useState } from "react";
+import EditProfileModal from "../components/EditProfileModal";
 import "../css/DashboardPage.css";
 
 const DashboardPage = () => {
   const { user, logout } = useAuthStore();
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-  };
+  const handleLogout = () => logout();
+  const toggleEdit = () => setIsEditing((prev) => !prev);
 
   return (
     <motion.div
@@ -19,6 +21,17 @@ const DashboardPage = () => {
       className="dashboard-container"
     >
       <h2 className="dashboard-heading">Dashboard</h2>
+
+      <div className="profile-section">
+        <img
+          src={user.profilePic || "/default-avatar.png"}
+          alt="Profile"
+          className="profile-picture"
+        />
+        <button className="edit-profile-btn" onClick={toggleEdit}>
+          Edit Profile
+        </button>
+      </div>
 
       <div className="dashboard-content">
         <motion.div
@@ -69,6 +82,8 @@ const DashboardPage = () => {
           Logout
         </motion.button>
       </motion.div>
+
+      {isEditing && <EditProfileModal user={user} onClose={toggleEdit} />}
     </motion.div>
   );
 };

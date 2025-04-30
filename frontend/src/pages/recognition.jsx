@@ -14,6 +14,9 @@ const RecognitionResults = ({ uploadedImage, matchedImage, confidence }) => {
         <p className="mt-4 text-lg text-green-600 font-semibold">Match Confidence: {confidence}%</p>
       </div>
 
+
+
+
       <div className="col-span-2 text-center mt-8">
         <button
           onClick={() => window.location.reload()}
