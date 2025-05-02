@@ -22,14 +22,17 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-
-
-
-
+app.use(cors({
+  origin: 'http://localhost:5173', // Confirm this is set to 5173
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser()); //allow us to access the cookie 
 // In index.js
+app.use("/api/auth", authRoutes) 
+app.use("/api/gallery",galleryRoutes ) 
+
 
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
@@ -38,13 +41,8 @@ if(process.env.NODE_ENV === 'production'){
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   })
 }
-app.use(cors({
-  origin: 'http://localhost:5173', // Confirm this is set to 5173
-  credentials: true
-}));
 
-app.use("/api/auth", authRoutes) 
-app.use("/api/gallery",galleryRoutes ) 
+
 
 
 

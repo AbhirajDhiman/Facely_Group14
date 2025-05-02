@@ -17,7 +17,7 @@ import PreviewPage from "./pages/PreviewPage";
 import About from "./pages/About";
 
 
-import Sidebar from "./components/Sidebar"; // Adjust the import path as necessary
+import Sidebar from "./components/Sidebar";
 import Gallery from "./pages/Gallery";
 
 const ProtectedRoute = ({ children }) => {
