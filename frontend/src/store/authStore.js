@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 
 export const useAuthStore = create((set) => ({
 	user: null,
+	images: null,
 	isAuthenticated: false,
 	error: null,
 	isLoading: false,
@@ -25,7 +26,7 @@ export const useAuthStore = create((set) => ({
 			withCredentials: true,
 		  });
 	  
-		  set({ user: response.data.user, isAuthenticated: true, isLoading: false });
+		  set({ user: response.data.user, isAuthenticated: true, isLoading: false, images: response.data.user.gallery });
 		} catch (error) {
 		  set({
 			error: error.response?.data?.message || "Error signing up",
@@ -50,6 +51,7 @@ export const useAuthStore = create((set) => ({
 				user: response.data.user,
 				error: null,
 				isLoading: false,
+				images: response.data.user.gallery
 			});
 		} catch (error) {
 			set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
@@ -71,7 +73,7 @@ export const useAuthStore = create((set) => ({
 		set({ isLoading: true, error: null });
 		try {
 			const response = await axios.post(`${API_URL}/verify-email`, { code });
-			set({ user: response.data.user, isAuthenticated: true, isLoading: false });
+			set({ user: response.data.user, isAuthenticated: true, isLoading: false, images: response.data.user.gallery });
 			return response.data;
 		} catch (error) {
 			set({ error: error.response.data.message || "Error verifying email", isLoading: false });
@@ -82,7 +84,8 @@ export const useAuthStore = create((set) => ({
 		set({ isCheckingAuth: true, error: null });
 		try {
 			const response = await axios.get(`${API_URL}/check-auth`, {withCredentials: true});
-			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false });
+			console.log(response);
+			set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false, images: response.data.user.gallery });
 		} catch (error) {
 			set({ error: null, isCheckingAuth: false, isAuthenticated: false });
 		}
