@@ -6,7 +6,6 @@ import path from 'path'
 
 import { connectDB } from './DB/connectdb.js';
 import { fileURLToPath } from 'url';
-import path from 'path';
 
 // This emulates __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
