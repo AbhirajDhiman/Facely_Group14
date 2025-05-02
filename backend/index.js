@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import path from 'path'
 
-import { connectDB } from './db/connectdb.js';
+import { connectDB } from './DB/connectdb.js';
 
 
 import authRoutes from './routes/auth.routes.js';
