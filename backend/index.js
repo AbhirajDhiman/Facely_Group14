@@ -5,6 +5,13 @@ import cors from 'cors'
 import path from 'path'
 
 import { connectDB } from './DB/connectdb.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+// This emulates __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 
 import authRoutes from './routes/auth.routes.js';
