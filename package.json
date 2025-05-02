@@ -1,10 +1,10 @@
 {
   "name": "scm_class_project",
   "version": "1.0.0",
-  "description": "📌 Class Group Project This repository contains the collaborative work of Abhiraj, Jaskaran, and Versha for a class group project. The goal of this project is to apply our classroom learning to a real-world-style application, emphasizing teamwork, code quality, and problem-solving.",
+  "description": "Class Group Project",
   "main": "backend/index.js",
   "scripts": {
-    "dev": "NODE_ENV=developement nodemon backend/index.js",
+    "dev": "NODE_ENV=development nodemon backend/index.js",
     "start": "NODE_ENV=production node backend/index.js",
     "build": "npm install && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend"
   },
@@ -12,7 +12,6 @@
     "type": "git",
     "url": "git+https://github.com/AbhirajDhiman/SCM_CLASS_PROJECT.git"
   },
-  "keywords": [],
   "author": "",
   "type": "module",
   "license": "ISC",
@@ -22,22 +21,17 @@
   "homepage": "https://github.com/AbhirajDhiman/SCM_CLASS_PROJECT#readme",
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "fs": "^0.0.1-security",
+    "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mailtrap": "^4.0.0",
     "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.2",
     "nodemailer": "^6.10.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "path-to-regexp": "^6.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
