@@ -35,11 +35,11 @@ app.use("/api/gallery", galleryRoutes);
 // Production configuration
 if (process.env.NODE_ENV === 'production') {
   // Static files
-  app.use(express.static(path.join(__dirname, 'frontend/dist')));
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
   
   // Client-side routing fallback
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
   });
 }
 
