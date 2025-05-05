@@ -8,6 +8,7 @@ import FormData from "form-data";
 import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { sendForgotPasswordEmail, sendResetSuccessfully, sendVerificationEmail, sendWelcomeEmail } from "../mail/email.js";
+import { Group } from "../models/group.model.js";
 
 const signup = async (req, res) => {
     try {
@@ -99,6 +100,7 @@ const verifyEmail = async (req, res) => {
 }
 
 const signin = async (req, res) => {
+    console.log("first")
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
@@ -243,5 +245,19 @@ const resendVerificationEmail = async (req, res) => {
     }
 }
 
+const getMyGroups = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId);
+        const groupIds = user.groups;
+        const groups = await Group.find({ _id: { $in: groupIds } });
+        res.status(200).json({
+            success: true,
+            groups
+        })
+    }
+    catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
 
-export { signup, signin, signout, verifyEmail, forgotPassword, resetPassword, checkAuth, resendVerificationEmail };
+export { signup, signin, signout, verifyEmail, forgotPassword, resetPassword, checkAuth, resendVerificationEmail, getMyGroups };

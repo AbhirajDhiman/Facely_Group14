@@ -24,6 +24,9 @@ export const createGroup = async (req, res) => {
       members: [req.userId]
     });
     await group.save();
+    const user = await User.findById(req.userId);
+    user.groups.push(group._id);
+    await user.save();
     res.status(201).json({ success: true, group });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

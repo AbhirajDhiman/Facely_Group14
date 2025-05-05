@@ -9,10 +9,12 @@ import {
 } from "../controllers/group.controller.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../middlewares/multer.js";
+import { getMyGroups } from "../controllers/auth.controller.js";
 
 router.post("/create", verifyToken, createGroup);
 router.post("/join", verifyToken, joinGroup);
 router.post("/:groupId/upload", verifyToken, upload.single("image"), uploadGroupImage);
 router.get("/:groupId/images", verifyToken, getGroupImages);
+router.get('/my-groups', verifyToken, getMyGroups);
 
 export default router;

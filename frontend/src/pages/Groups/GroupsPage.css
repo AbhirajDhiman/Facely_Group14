@@ -1,0 +1,372 @@
+/* --- Global Styles & Theme --- */
+
+/* --- General Page Structure --- */
+.groups-page, .group-detail-page {
+    width: 100%;
+    max-width: 1200px; /* Max width for content */
+    margin: 0 auto; /* Center the page content */
+    padding: 1rem;
+    background-color: rgba(17, 24, 39, 0.6); /* Slightly transparent dark background */
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px); /* Frosted glass effect */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.groups-page h1, .group-detail-page h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+/* --- Forms Section --- */
+.forms-section {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 2rem;
+    margin-bottom: 3rem;
+    justify-content: center; /* Center forms */
+}
+
+.form-container {
+    flex: 1; /* Allow forms to grow */
+    min-width: 300px; /* Minimum width before wrapping */
+    max-width: 450px; /* Maximum width */
+    padding: 1.5rem 2rem;
+    background-color: rgba(31, 41, 55, 0.7); /* Darker form background */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+    color: #93c5fd; /* Light blue heading */
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-container input[type="text"] {
+    padding: 0.8rem 1rem;
+    background-color: rgba(55, 65, 81, 0.8); /* Input background */
+    border: 1px solid rgba(107, 114, 128, 0.5);
+    border-radius: 6px;
+    color: #e5e7eb;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container input[type="text"]:focus {
+    outline: none;
+    border-color: #60a5fa; /* Blue border on focus */
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+}
+
+.form-container button {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #10b981, #059669); /* Green gradient button */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form-container button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669, #047857); /* Darker green on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form-container button:disabled {
+    background: #4b5563; /* Gray background when disabled */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* --- Lists Section --- */
+.lists-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-around; /* Distribute lists */
+}
+
+.group-list-container {
+    flex: 1;
+    min-width: 300px; /* Min width before stacking */
+    padding: 1.5rem;
+    background-color: rgba(31, 41, 55, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.group-list-container h2 {
+    color: #a5f3fc; /* Cyan heading */
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.group-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 1rem;
+}
+
+/* --- Group Card --- */
+.group-card {
+    background-color: rgba(55, 65, 81, 0.8);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden; /* Ensure content fits */
+}
+
+.group-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border-color: #6ee7b7; /* Emerald border on hover */
+}
+
+.group-card h3 {
+    color: #d1d5db; /* Lighter text for card title */
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if name is too long */
+}
+
+.group-card p {
+    color: #9ca3af; /* Muted text color */
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- Group Detail Page --- */
+.group-detail-page {
+    padding: 2rem;
+}
+
+.back-button {
+    background: none;
+    border: 1px solid #6b7280;
+    color: #9ca3af;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(55, 65, 81, 0.8);
+    color: #e5e7eb;
+}
+
+.invite-code-display {
+    background-color: rgba(55, 65, 81, 0.6);
+    color: #a5f3fc;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    display: inline-block; /* Fit content */
+    margin: 0.5rem 0 1rem 0;
+    font-family: 'monospace'; /* Monospace for code */
+    font-size: 1rem;
+    border: 1px dashed rgba(165, 243, 252, 0.4);
+}
+
+.group-detail-page p {
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+/* --- Image Upload --- */
+.image-upload-container {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: rgba(31, 41, 55, 0.7);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.image-upload-container h3 {
+    color: #93c5fd;
+    margin-bottom: 1rem;
+}
+
+.image-upload-container .select-file-btn,
+.image-upload-container .upload-btn {
+    padding: 0.7rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-right: 0.5rem; /* Space between buttons */
+}
+
+.image-upload-container .select-file-btn {
+    background-color: #3b82f6; /* Blue */
+    color: white;
+    border: none;
+}
+.image-upload-container .select-file-btn:hover:not(:disabled) {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.image-upload-container .upload-btn {
+    background-color: #10b981; /* Green */
+    color: white;
+    border: none;
+}
+.image-upload-container .upload-btn:hover:not(:disabled) {
+    background-color: #059669;
+     transform: translateY(-1px);
+}
+
+.image-upload-container button:disabled {
+    background-color: #4b5563;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+/* --- Image Gallery --- */
+.image-gallery-container {
+    margin-top: 2.5rem;
+}
+
+.image-gallery-container h3 {
+    color: #a5f3fc; /* Cyan heading */
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(165, 243, 252, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid for images */
+    gap: 1.5rem;
+}
+
+.gallery-item {
+    background-color: rgba(55, 65, 81, 0.5);
+    border-radius: 8px;
+    overflow: hidden; /* Clip image corners */
+    border: 1px solid rgba(107, 114, 128, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* For potential overlay effects */
+}
+
+.gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 180px; /* Fixed height for consistency */
+    object-fit: cover; /* Cover the area, cropping if needed */
+    border-bottom: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.gallery-item .uploader-name {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    padding: 0.5rem 0.8rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* --- Utility Classes --- */
+.loading-container, .error-container {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: #9ca3af;
+}
+
+.error-message {
+    color: #fca5a5; /* Light red for errors */
+    background-color: rgba(153, 27, 27, 0.3); /* Dark red background */
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(252, 165, 165, 0.4);
+    text-align: center;
+}
+
+.loading-text, .info-text {
+     text-align: center;
+     color: #9ca3af;
+     margin-top: 1rem;
+     font-style: italic;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .groups-page h1, .group-detail-page h1 {
+        font-size: 2rem;
+    }
+
+    .forms-section, .lists-section {
+        flex-direction: column; /* Stack forms and lists vertically */
+        gap: 1.5rem;
+    }
+
+    .form-container {
+        max-width: none; /* Allow forms to take full width */
+    }
+
+    .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Smaller images on mobile */
+        gap: 1rem;
+    }
+
+     .gallery-item img {
+         height: 120px; /* Adjust image height */
+     }
+
+     .groups-page, .group-detail-page {
+        padding: 1rem; /* Reduce padding on smaller screens */
+     }
+}
+
+@media (max-width: 480px) {
+     .groups-page h1, .group-detail-page h1 {
+        font-size: 1.8rem;
+    }
+    .group-card h3 {
+        font-size: 1.1rem;
+    }
+     .form-container input[type="text"], .form-container button {
+        font-size: 0.95rem;
+     }
+      .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Even smaller images */
+        gap: 0.8rem;
+    }
+}
