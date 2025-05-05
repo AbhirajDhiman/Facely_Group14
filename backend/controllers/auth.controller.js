@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import uploadToCloudinary from "../cloudinary/uploadToCloudinary.js";
-
+import uploadToCloudinary from "../cloudinary/uploadToCloudinary.js"
+import axios from "axios";
+import fs from "fs";
+import FormData from "form-data";
 
 import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
@@ -13,16 +15,27 @@ const signup = async (req, res) => {
       if (!name || !email || !password) {
         throw new Error("All fields are required");
       }
-      console.log(res.file);
+      console.log(req.file);
   
       const userExist = await User.findOne({ email });
       console.log(userExist);
       if (userExist) throw new Error("User already exists");
   
-      let profilePicUrl = "";
-      if (req.file) {
-        profilePicUrl = await uploadToCloudinary(req.file.path);
-      }
+      if (!req.file) throw new Error("Profile picture required");
+
+      const formData = new FormData();
+        formData.append('image', fs.createReadStream(req.file.path));
+
+        const embeddingRes = await axios.post(
+            'http://127.0.0.1:8000/make-embedding', 
+            formData, 
+            { headers: formData.getHeaders() }
+            );
+            if (!embeddingRes) {
+                throw new Error("Face recognition failed");
+              }
+
+            const profilePicUrl = await uploadToCloudinary(req.file.path);
   
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -31,6 +44,7 @@ const signup = async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        faceEmbedding: embeddingRes.data.embedding,
         profilePic: profilePicUrl,
         verificationToken,
         verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -49,7 +63,8 @@ const signup = async (req, res) => {
         },
       });
     } catch (error) {
-      res.status(400).json({ success: false, message: error.message });
+        if (req.file) fs.unlinkSync(req.file.path);
+        res.status(400).json({ success: false, message: error.message });
     }
   };
 const verifyEmail = async (req, res) => {
@@ -171,7 +186,7 @@ const resetPassword = async (req, res) => {
 
         await user.save();
 
-        await sendResetSuccessfully(user.email, user.name);
+    await sendResetSuccessfully(user.email, user.name);
 
         res.status(200).json({
             success: true,

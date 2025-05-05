@@ -12,4 +12,9 @@ const uploadToCloudinary = async (filePath, folder = "Facely") => {
   }
 };
 
+export const deleteFromCloudinary = async (url) => {
+  const publicId = url.split("/").pop().split(".")[0];
+  await cloudinary.uploader.destroy(publicId);
+};
+
 export default uploadToCloudinary;
