@@ -8,7 +8,7 @@ FACELY is an intelligent facial recognition system that allows users to upload a
 
 🔎 Practical Use Cases
 👨‍💼 In an organization:
-Want to check all events or security footage where a specific employee appears? Upload their photo and FACELY will retrieve all instances across the dataset.
+Want to check all events or security footage where a specific employee appears? Upload their photo and FACELY will retrieve all instances across the datset.
 
 🎉 At a function or event:
 Looking for all pictures where you were captured during a college fest or corporate event? Just upload your image to find all related photos.
