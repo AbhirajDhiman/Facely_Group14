@@ -30,7 +30,7 @@ Facial features are extracted.
 The system compares the uploaded face embeddings with those stored in the database to find matches.
 
 📲 Result Display
-The application displays the matched identity and retrieves all corresponding images. If no match is found, it returns an "Unknown" status.
+The application displays the matched identity and retrieves all corresponding images. If no match is found, it returns an "Unkown" status.
 
 
 
