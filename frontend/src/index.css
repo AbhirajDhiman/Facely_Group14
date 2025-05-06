@@ -1,113 +1,148 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 255 70% 75%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 255 70% 75%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262 83% 58%;
+  }
 }
 
-body {
-  font-family: sans-serif;
-  line-height: 1.6;
-  color: #222;
-  background-color: #f5f5f5;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
-a {
-  text-decoration: none;
-  color: #1890ff;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-a:hover {
-  text-decoration: underline;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-h1 {
-  font-size: 2rem;
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-h2 {
-  font-size: 1.5rem;
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
 }
 
-h3 {
-  font-size: 1.25rem;
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out forwards;
 }
 
-h4 {
-  font-size: 1rem;
+.animate-delay-100 {
+  animation-delay: 100ms;
 }
 
-h5 {
-  font-size: 0.875rem;
+.animate-delay-200 {
+  animation-delay: 200ms;
 }
 
-h6 {
-  font-size: 0.75rem;
+.animate-delay-300 {
+  animation-delay: 300ms;
 }
 
-p {
-  margin-bottom: 1rem;
+.hover-scale {
+  @apply transition-transform duration-200 hover:scale-105;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.hover-lift {
+  @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
 }
 
-ul li {
-  margin-bottom: 0.5rem;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-input, textarea, select {
-  font-family: inherit;
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  width: 100%;
-}
-
-input[type="submit"] {
-  background-color: #1890ff;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-input[type="submit"]:hover {
-  background-color: #0f7ae5;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.flex > * {
-  flex: 1 1 200px;
-  margin: 0.5rem;
-}
-.css-1374baf-MuiTypography-root{
-  font-size: 25px !important;
-  color: white !important ;
+.card-gradient {
+  background: linear-gradient(135deg, rgba(155, 135, 245, 0.1) 0%, rgba(110, 89, 165, 0.1) 100%);
 }
