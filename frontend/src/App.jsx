@@ -19,6 +19,7 @@ import About from "./pages/About";
 
 import Sidebar from "./components/Sidebar";
 import Gallery from "./pages/Gallery";
+import GroupsPage from "./pages/Groups/Groupspage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -126,6 +127,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/groups'
+          element={
+            <ProtectedRoute>
+              <GroupsPage />
+            </ProtectedRoute>
+          }
+        />
+
+
+
         <Route
           path='/signup'
           element={

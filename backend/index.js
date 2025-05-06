@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './DB/connectdb.js';
 import authRoutes from './routes/auth.routes.js';
 import galleryRoutes from './routes/gallery.routes.js';
+import groupRoutes from './routes/group.routes.js';
 
 // ESM dirname configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -20,9 +21,7 @@ const app = express();
 
 // Middleware configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? 'https://your-production-domain.com' 
-    : 'http://localhost:5173',
+  origin: 'http://localhost:5173',
   credentials: true
 }));
 app.use(express.json());
@@ -31,6 +30,7 @@ app.use(cookieParser());
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/gallery", galleryRoutes);
+app.use("/api/group", groupRoutes);
 
 // Production configuration
 if (process.env.NODE_ENV === 'production') {
