@@ -16,7 +16,7 @@ Looking for all pictures where you were captured during a college fest or corpor
 🛠️ In a hackathon or team project:
 Need to gather all images you're featured in for a report or social post? FACELY makes it simple—upload one photo, and it fetches the rest.
 
-🔍 How the App Works
+🔍 How the App Works.
 📤 User Photo Upload
 Users upload an image via the web interface.
 
