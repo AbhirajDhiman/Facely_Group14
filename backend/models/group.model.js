@@ -21,20 +21,8 @@ const groupSchema = new mongoose.Schema({
     ref: 'User'
   }],
   gallery: [{
-    url: String,
-    sizeInMB: Number,
-    uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    visibleTo: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }],
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Picture'
   }]
 }, { timestamps: true });
 
