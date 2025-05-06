@@ -18,10 +18,16 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    groups:[{
+    createdGroups:[{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group'
     }],
+    joinedGroups:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group'
+      }
+    ],
     lastLogin: {
         type: Date,
         default: Date.now

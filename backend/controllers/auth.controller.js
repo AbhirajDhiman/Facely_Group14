@@ -247,15 +247,16 @@ const resendVerificationEmail = async (req, res) => {
 
 const getMyGroups = async (req, res) => {
     try {
-        const user = await User.findById(req.userId);
-        const groupIds = user.groups;
-        const groups = await Group.find({ _id: { $in: groupIds } });
+        const user = await User.findById(req.userId)
+            .populate('createdGroups')
+            .populate('joinedGroups');
+            
         res.status(200).json({
             success: true,
-            groups
-        })
-    }
-    catch (error) {
+            createdGroups: user.createdGroups,
+            joinedGroups: user.joinedGroups
+        });
+    } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 }

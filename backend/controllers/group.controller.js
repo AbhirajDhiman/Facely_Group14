@@ -16,19 +16,23 @@ const generateInviteCode = async () => {
 };
 
 export const createGroup = async (req, res) => {
+    console.log("aagya")
+    const inviteCode = await generateInviteCode();
   try {
     const group = new Group({
       name: req.body.name,
       creator: req.userId,
-      inviteCode: await generateInviteCode(),
+      inviteCode,
       members: [req.userId]
     });
     await group.save();
     const user = await User.findById(req.userId);
-    user.groups.push(group._id);
+    user.createdGroups.push(group._id);
+    user.joinedGroups.push(group._id);
     await user.save();
-    res.status(201).json({ success: true, group });
+    res.status(200).json({ success: true, group, ok:true, inviteCode });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -38,13 +42,18 @@ export const joinGroup = async (req, res) => {
     const group = await Group.findOne({ inviteCode: req.body.inviteCode });
     if (!group) throw new Error("Invalid invite code");
     
-    if (!group.members.includes(req.userId)) {
-      group.members.push(req.userId);
-      await group.save();
+    if (group.members.includes(req.userId)) {
+        return res.status(400).json({ success: false, message: "You already have joined the group" });
     }
     
+    group.members.push(req.userId);
+    await group.save();
+    const user = await User.findById(req.userId);
+    user.joinedGroups.push(group._id);
+    await user.save();
     res.status(200).json({ success: true, group });
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -124,19 +133,45 @@ export const uploadGroupImage = async (req, res) => {
   };
 
   
-export const getGroupImages = async (req, res) => {
+  export const getGroupImages = async (req, res) => {
+    try {
+      const group = await Group.findById(req.params.groupId)
+        .populate({
+          path: 'gallery',
+          populate: {
+            path: 'uploadedBy',
+            select: 'name profilePic'
+          }
+        });
+  
+      if (!group) {
+        return res.status(404).json({ success: false, message: "Group not found" });
+      }
+  
+      if (!group.members.some(member => member.equals(req.userId))) {
+        return res.status(403).json({ success: false, message: "Not a member" });
+      }
+  
+      const filtered = group.gallery.filter(image => 
+        image.visibleTo.some(id => id.equals(req.userId))
+      );
+  
+      res.status(200).json({ success: true, images: filtered });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  };
+
+export const getMetaData = async (req, res) => {
   try {
     const group = await Group.findById(req.params.groupId)
-      .populate("gallery.uploadedBy", "name profilePic");
-    
-    if (!group.members.includes(req.userId)) throw new Error("Not a member");
+      .populate("creator", "name profilePic")
+      .populate("members", "name profilePic");
 
-    const filtered = group.gallery.filter(image => 
-      image.visibleTo.some(id => id.equals(req.userId))
-    );
-
-    res.status(200).json({ success: true, images: filtered });
+    res.status(200).json({ success: true, group });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
