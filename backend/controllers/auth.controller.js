@@ -248,13 +248,57 @@ const resendVerificationEmail = async (req, res) => {
 const getMyGroups = async (req, res) => {
     try {
         const user = await User.findById(req.userId)
-            .populate('createdGroups')
-            .populate('joinedGroups');
-            
+            .populate({
+                path: 'createdGroups',
+                populate: {
+                    path: 'creator',
+                    select: 'name profilePic'
+                }
+            })
+            .populate({
+                path: 'createdGroups',
+                populate: {
+                    path: 'members',
+                    select: 'name profilePic'
+                }
+            })
+            .populate({
+                path: 'joinedGroups',
+                populate: {
+                    path: 'creator',
+                    select: 'name profilePic'
+                }
+            })
+            .populate({
+                path: 'joinedGroups',
+                populate: {
+                    path: 'members',
+                    select: 'name profilePic'
+                }
+            });
+
+        const formatGroups = (groups) => {
+            return groups.map(group => ({
+                _id: group._id,
+                name: group.name,
+                inviteCode: group.inviteCode,
+                creator: {
+                    _id: group.creator._id,
+                    name: group.creator.name,
+                    profilePic: group.creator.profilePic
+                },
+                members: group.members.map(member => ({
+                    _id: member._id,
+                    name: member.name,
+                    profilePic: member.profilePic
+                }))
+            }));
+        };
+
         res.status(200).json({
             success: true,
-            createdGroups: user.createdGroups,
-            joinedGroups: user.joinedGroups
+            createdGroups: formatGroups(user.createdGroups),
+            joinedGroups: formatGroups(user.joinedGroups)
         });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

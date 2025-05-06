@@ -79,7 +79,7 @@ export const uploadGroupImage = async (req, res) => {
         { headers: formData.getHeaders() }
       );
   
-      const embeddings = embeddingRes.data.embeddings;
+      const embeddings = embeddingRes.data.embedding;
   
       if (!embeddings || !embeddings.length) {
         throw new Error("Face detection failed or no faces found");
