@@ -10,10 +10,24 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    faceEmbedding: {
+      type: [Number],
+      required: true
+    },
     password: {
         type: String,
         required: true
     },
+    createdGroups:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Group'
+    }],
+    joinedGroups:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group'
+      }
+    ],
     lastLogin: {
         type: Date,
         default: Date.now

@@ -19,6 +19,7 @@ import About from "./pages/About";
 
 import Sidebar from "./components/Sidebar";
 import Gallery from "./pages/Gallery";
+import GroupsPage from "./pages/Groups/Groupspage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -57,28 +58,6 @@ function App() {
   return (
 <>
     <div className="app-container">
-      <FloatingShape 
-        color="#22c55e"    /* bg-green-500 */
-        size="256px"       /* w-64 h-64 */
-        top="-5%" 
-        left="10%" 
-        delay={0} 
-      />
-      <FloatingShape 
-        color="#10b981"    /* bg-emerald-500 */
-        size="192px"      /* w-48 h-48 */
-        top="70%" 
-        left="80%" 
-        delay={5} 
-      />
-      <FloatingShape 
-        color="#84cc16"    /* bg-lime-500 */
-        size="128px"       /* w-32 h-32 */
-        top="40%" 
-        left="-10%" 
-        delay={2} 
-      />
-
       <Routes>
         <Route
           path='/'
@@ -126,6 +105,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path='/groups'
+          element={
+            <ProtectedRoute>
+              <GroupsPage />
+            </ProtectedRoute>
+          }
+        />
+
+
+
         <Route
           path='/signup'
           element={
