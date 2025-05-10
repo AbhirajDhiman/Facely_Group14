@@ -2,7 +2,6 @@
 import cosineSimilarity from "compute-cosine-similarity";
 
 export const compareEmbeddings = async (storedEmbeddings, newEmbeddings, threshold = 0.5) => {
-  // Ensure both are arrays of embeddings (2D arrays)
   if (!Array.isArray(storedEmbeddings[0])) {
     storedEmbeddings = [storedEmbeddings];
   }
@@ -15,6 +14,7 @@ export const compareEmbeddings = async (storedEmbeddings, newEmbeddings, thresho
     for (const incoming of newEmbeddings) {
       const similarity = cosineSimilarity(stored, incoming);
       const distance = 1 - similarity;
+      console.log("Distance",distance);
 
       if (distance < threshold) {
         return true; // ✅ Match found

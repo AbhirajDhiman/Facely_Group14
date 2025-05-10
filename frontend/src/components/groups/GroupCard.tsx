@@ -41,6 +41,7 @@ const GroupCard = ({ group, isCreator }: GroupCardProps) => {
       .toUpperCase()
       .slice(0, 2);
   };
+  console.log("groups", group);
 
   return (
     <Card className="overflow-hidden hover-lift">
@@ -65,8 +66,8 @@ const GroupCard = ({ group, isCreator }: GroupCardProps) => {
           <div key={group._id} className="flex -space-x-2">
             {group.members.slice(0, 5).map((member) => (
               <Avatar key={member._id} className="border-2 border-background">
-                <AvatarImage key={member._id} src={member.profilePic} alt={member.name} />
-                <AvatarFallback key={member._id}>{getInitials(member.name)}</AvatarFallback>
+                <AvatarImage src={member.profilePic} alt={member.name} />
+                <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
               </Avatar>
             ))}
             {group.members.length > 5 && (

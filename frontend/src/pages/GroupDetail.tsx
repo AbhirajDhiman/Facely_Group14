@@ -16,6 +16,7 @@ import { Copy, ImagePlus, Loader2 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { API_BASE_URL } from '@/config/config';
 import JSZip from 'jszip';
+import { useAuth } from '@/context/AuthContext';
 
 const triggerElementClick = (element) => {
   if (element && 'click' in element) {
@@ -25,17 +26,22 @@ const triggerElementClick = (element) => {
 
 const GroupDetail = () => {
   const { groupId } = useParams();
+  const {user} = useAuth();
   const { currentGroup, getGroupInfo, getGroupImages, uploadGroupImage, loading } = useGroup();
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
     if (groupId) {
       getGroupInfo(groupId);
       fetchImages(groupId);
+      if(currentGroup?.creator?._id === user?._id){
+        setIsCreator(true);
+      }
     }
   }, []);
 
@@ -182,9 +188,14 @@ const GroupDetail = () => {
               </div>
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
+                {
+                  isCreator?
                   <Button variant="outline">
                     <ImagePlus className="mr-2 h-4 w-4" /> Upload Image
-                  </Button>
+                  </Button>:
+                  ""
+                }
+                  
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>

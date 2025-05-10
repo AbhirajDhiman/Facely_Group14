@@ -17,6 +17,7 @@ import JSZip from 'jszip';
 import axios from 'axios';
 import FormData from "form-data";
 import { compareEmbeddings } from '@/context/faceRecognition';
+
 async function zipToFiles(zipFile: File): Promise<File[]> {
   const jsZip = new JSZip();
   const zipData = await jsZip.loadAsync(zipFile);
@@ -81,14 +82,14 @@ const Upload = () => {
 
   const handleSubmit = async () => {
     if (leftFiles.length === 0) return;
-    
+  
     setIsSubmitting(true);
     setProgress(0);
-    
+  
     try {
       // Prepare reference embedding
-      let referenceEmbedding: number[] = [];
-      
+      let referenceEmbedding = [];
+  
       if (uploadMethod === 'reference' && referenceFile) {
         const formData = new FormData();
         formData.append('image', referenceFile);
@@ -99,49 +100,36 @@ const Upload = () => {
       } else {
         throw new Error('No reference image available');
       }
-
-      // Process each file
-      const matchingFiles: Array<{ name: string; url: string }> = [];
-      const totalFiles = leftFiles.length;
-      
-      for (let i = 0; i < leftFiles.length; i++) {
-        const file = leftFiles[i];
-        const formData = new FormData();
-        formData.append('image', file);
-        
-        try {
-          const data = await axios.post('http://127.0.0.1:8000/make-multiple-embeddings', formData);
-          const imageEmbeddings = data.data.embedding;
-          if (!imageEmbeddings || !imageEmbeddings.length) {
-            throw new Error("Face detection failed or no faces found");
-          }
-          console.log("imageEmbeddings", imageEmbeddings);
-          console.log("referenceEmbedding", referenceEmbedding);
-          
-          const isMatch = await compareEmbeddings(referenceEmbedding, imageEmbeddings);
-          console.log(isMatch);
-          if (isMatch) {
-            matchingFiles.push({
-              name: file.name,
-              url: URL.createObjectURL(file)
-            });
-          }
-        } catch (error) {
-          console.log(error.message);
-          console.error(`Error processing file ${file.name}:`, error);
+  
+      // Prepare form data with all images and reference embedding
+      const formData = new FormData();
+      leftFiles.forEach(file => {
+        formData.append('images', file);
+      });
+      formData.append('referenceEmbedding', JSON.stringify(referenceEmbedding));
+  
+      // Send request to find matches
+      const response = await axios.post('http://127.0.0.1:8000/find-matches', formData, {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
         }
-        
-        setProgress(((i + 1) / totalFiles) * 100);
-      }
-
+      });
+  
+      const matchingIndices = response.data.matchingIndices;
+  
+      // Filter matching files based on indices
+      const matchingFiles = matchingIndices.map(index => ({
+        name: leftFiles[index].name,
+        url: URL.createObjectURL(leftFiles[index])
+      }));
+  
       setIsSuccess(true);
-      // Here you would typically navigate to a results page with the matching files
-      // For now we'll just show success
-      navigate('/preview', { 
-        state: { 
+      navigate('/preview', {
+        state: {
           images: matchingFiles,
           count: matchingFiles.length
-        } 
+        }
       });
     } catch (error) {
       console.error('Upload failed', error);

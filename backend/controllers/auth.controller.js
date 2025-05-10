@@ -37,6 +37,7 @@ const signup = async (req, res) => {
               }
 
             const profilePicUrl = await uploadToCloudinary(req.file.path);
+            console.log(profilePicUrl);
   
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -55,6 +56,7 @@ const signup = async (req, res) => {
       generateTokenAndSetCookie(res, user._id);
       await sendVerificationEmail(user.email, verificationToken);
   
+      console.log("DOne bhaji");
       res.status(201).json({
         success: true,
         message: "User created successfully",
@@ -247,17 +249,78 @@ const resendVerificationEmail = async (req, res) => {
 
 const getMyGroups = async (req, res) => {
     try {
+        if (!req.userId) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Authentication required' 
+            });
+        }
+
         const user = await User.findById(req.userId)
-            .populate('createdGroups')
-            .populate('joinedGroups');
-            
+            .populate([
+                {
+                    path: 'createdGroups',
+                    populate: [
+                        {
+                            path: 'creator',
+                            select: '_id name profilePic'
+                        },
+                        {
+                            path: 'members',
+                            select: '_id name profilePic'
+                        }
+                    ]
+                },
+                {
+                    path: 'joinedGroups',
+                    populate: [
+                        {
+                            path: 'creator',
+                            select: '_id name profilePic'
+                        },
+                        {
+                            path: 'members',
+                            select: '_id name profilePic'
+                        }
+                    ]
+                }
+            ]);
+
+        if (!user) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'User not found' 
+            });
+        }
+
+        const formatGroup = (group) => ({
+            _id: group._id,
+            name: group.name,
+            creator: {
+                _id: group.creator._id,
+                name: group.creator.name,
+                profilePic: group.creator.profilePic
+            },
+            inviteCode: group.inviteCode,
+            members: group.members.map(member => ({
+                _id: member._id,
+                name: member.name,
+                profilePic: member.profilePic
+            }))
+        });
+
         res.status(200).json({
             success: true,
-            createdGroups: user.createdGroups,
-            joinedGroups: user.joinedGroups
+            createdGroups: user.createdGroups.map(formatGroup),
+            joinedGroups: user.joinedGroups.map(formatGroup)
         });
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        console.error('Error in getMyGroups:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Internal server error',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 }
 

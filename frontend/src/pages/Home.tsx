@@ -7,6 +7,7 @@ import { ArrowRight, Camera, CircleUser, UserRound, Image, Lock, Share2, Users }
 import image3 from '@/assets/Versha.png';
 import image2 from '@/assets/chotaDon.png';
 import image1 from '@/assets/Jassi.png';
+import image4 from '@/assets/Teeno.jpeg';
 
 
 
@@ -67,11 +68,13 @@ const Home = () => {
                     <div className="aspect-square rounded-lg bg-muted">
                       <img src={image3} alt="" className="w-full h-full object-cover rounded-lg" />
                     </div>
-                    <div className="aspect-square rounded-lg bg-muted"></div>
+                    <div className="aspect-square rounded-lg bg-muted">
+                      <img src={image4} alt="" className="w-full h-full object-contain rounded-lg" />
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex -space-x-2">
-                      {[...Array(3)].map((_, i) => (
+                      {[...Array(4)].map((_, i) => (
                         <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800 bg-accent/20" >
                           <img src={images[i]} alt="" className="w-full h-full object-cover rounded-full" />
                         </div>

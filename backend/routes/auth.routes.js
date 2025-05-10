@@ -22,9 +22,4 @@ router.post('/resend-verification-email', resendVerificationEmail);
 
 
 
-// gallery routes
-
-
-
-
 export default router;

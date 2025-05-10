@@ -1,5 +1,4 @@
-
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import AuthRedirect from '@/components/auth/AuthRedirect';
@@ -7,7 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/context/AuthContext';
-import { Eye, EyeOff, Lock, Mail, User, Camera } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User, Camera, Upload, X } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const SignUp = () => {
   const [name, setName] = useState('');
@@ -18,11 +23,78 @@ const SignUp = () => {
   const [error, setError] = useState<string | null>(null);
   const [profilePic, setProfilePic] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
   const { signup } = useAuth();
   const navigate = useNavigate();
-  
+
+  // Handle camera operations
+  useEffect(() => {
+    if (showCameraModal) {
+      startCamera();
+    } else {
+      stopCamera();
+    }
+
+    return () => {
+      stopCamera();
+    };
+  }, [showCameraModal]);
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user' } // Front camera
+      });
+      mediaStreamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      setCameraError('Could not access camera. Please check permissions.');
+      console.error('Camera error:', err);
+    }
+  };
+
+  const stopCamera = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current = null;
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    
+    canvas.toBlob(blob => {
+      if (blob) {
+        const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+        
+        // Validate file size
+        if (file.size > 5 * 1024 * 1024) {
+          setError('Captured image is too large (max 5MB)');
+          return;
+        }
+
+        setProfilePic(file);
+        setPreviewUrl(URL.createObjectURL(file));
+        setShowCameraModal(false);
+      }
+    }, 'image/jpeg', 0.9);
+  };
+
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -76,7 +148,80 @@ const SignUp = () => {
       setIsSubmitting(false);
     }
   };
-  
+
+  const ProfilePictureControls = () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div className="absolute bottom-0 right-0">
+          <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer shadow-md hover:bg-accent/90 transition-colors">
+            <Camera size={16} />
+          </div>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuItem 
+          onClick={() => fileInputRef.current?.click()}
+          className="cursor-pointer"
+        >
+          <Upload size={14} className="mr-2" />
+          Upload Photo
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          onClick={() => setShowCameraModal(true)}
+          className="cursor-pointer"
+        >
+          <Camera size={14} className="mr-2" />
+          Take Photo
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  const CameraModal = () => (
+    <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+      <div className="relative max-w-md w-full bg-background rounded-lg p-6">
+        <div className="absolute right-4 top-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowCameraModal(false)}
+            className="text-white hover:bg-white/10"
+          >
+            <X size={20} />
+          </Button>
+        </div>
+        
+        <h3 className="text-lg font-medium text-white mb-4">Take Profile Picture</h3>
+        
+        {cameraError ? (
+          <div className="text-destructive text-center py-8">{cameraError}</div>
+        ) : (
+          <>
+            <div className="relative aspect-square bg-gray-800 rounded-lg overflow-hidden">
+              <video 
+                ref={videoRef} 
+                autoPlay 
+                playsInline 
+                muted
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 ring-2 ring-accent/50 rounded-lg pointer-events-none" />
+            </div>
+            
+            <div className="mt-6 flex justify-center">
+              <Button
+                onClick={capturePhoto}
+                className="rounded-full h-14 w-14 flex items-center justify-center bg-white hover:bg-white/90 text-black"
+              >
+                <div className="h-12 w-12 rounded-full bg-white border-4 border-black" />
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <AuthRedirect>
       <Layout>
@@ -112,11 +257,9 @@ const SignUp = () => {
                       <Camera size={32} className="text-accent" />
                     )}
                   </div>
-                  <div className="absolute bottom-0 right-0">
-                    <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white cursor-pointer shadow-md">
-                      <Camera size={16} />
-                    </div>
-                  </div>
+                  
+                  <ProfilePictureControls />
+                  
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -214,6 +357,8 @@ const SignUp = () => {
             </div>
           </div>
         </div>
+        
+        {showCameraModal && <CameraModal />}
       </Layout>
     </AuthRedirect>
   );
