@@ -8,6 +8,12 @@ import { User } from "../models/user.model.js";
 import uploadToCloudinary from "../cloudinary/uploadToCloudinary.js";
 import { Picture } from "../models/picture.model.js";
 import { compareEmbeddings } from "../utils/faceRecognition.js";
+import { analyzeImage } from "./gemini.controller.js";
+import { getVisionModel } from "../services/gemini.js";
+
+
+const model = getVisionModel();
+
 
 const generateInviteCode = async () => {
   const code = crypto.randomBytes(4).toString("hex");
@@ -59,78 +65,99 @@ export const joinGroup = async (req, res) => {
 };
 
 export const uploadGroupImage = async (req, res) => {
-    try {
+  let tempFilePath = req.file?.path;
+
+  try {
       const group = await Group.findById(req.params.groupId);
       if (group.creator.toString() !== req.userId) {
-        throw new Error("Not a group creator");
+          throw new Error("Not a group creator");
       }
-  
-        console.log(req.file);
-      // Upload image to Cloudinary first
-      const imageUrl = await uploadToCloudinary(req.file.path);
-  
-        console.log(imageUrl)
-      // Generate embeddings using Python service
-      const formData = new FormData();
-      formData.append("image", fs.createReadStream(req.file.path));
-      const embeddingRes = await axios.post(
-        "http://127.0.0.1:8000/make-multiple-embeddings",
-        formData,
-        { headers: formData.getHeaders() }
-      );
-  
-      const embeddings = embeddingRes.data.embedding;
-  
-      if (!embeddings || !embeddings.length) {
-        throw new Error("Face detection failed or no faces found");
-      }
-  
-      // Create picture instance
-      const picture = new Picture({
-        url: imageUrl,
-        sizeInMB: req.file.size / (1024 * 1024),
-        uploadedBy: req.userId,
-        embeddings, // correct plural field
-        group: group._id
-      });
-  
-      // Find all members
-      const members = await User.find({ _id: { $in: group.members } });
-  
-      // Run embedding comparisons in parallel
-      const visibleChecks = await Promise.all(
-        members.map(async (member) => {
-          const isMatch = await compareEmbeddings(member.faceEmbedding, embeddings);
-          return isMatch ? member._id : null;
-        })
-      );
-  
-      // Filter matched members
-      picture.visibleTo = visibleChecks.filter(Boolean); // remove nulls
-      await picture.save();
-  
-      // Update group gallery
-      group.gallery.push(picture._id);
-      await group.save();
-  
-    //   Clean up temp file
-      if (fs.existsSync(req.file.path)) {
-        fs.unlinkSync(req.file.path);
-      }
-  
-      res.status(201).json({
-        success: true,
-        visibleTo: picture.visibleTo,
-        pictureId: picture._id
-      });
-  
-    } catch (error) {
-      if (req.file && fs.existsSync(req.file.path)) {
-        fs.unlinkSync(req.file.path);
+      const imageData = fs.readFileSync(tempFilePath).toString("base64");
+
+      const result = await model.generateContent([
+          { text: "Give a brief 20 to 30 word description of what is shown or said in this image." },
+          {
+              inlineData: {
+                  mimeType: "image/jpeg",
+                  data: imageData,
+              },
+          },
+      ]);
+
+      const response = await result.response;
+      const description = response.text();
+      console.log(description);
+
+      // 1. Upload to Cloudinary
+      // const imageUrl = await uploadToCloudinary(tempFilePath);
+
+      // 2. Create initial Picture document without embeddings/visibility
+      // const picture = new Picture({
+      //     url: imageUrl,
+      //     sizeInMB: req.file.size / (1024 * 1024),
+      //     uploadedBy: req.userId,
+      //     group: group._id,
+      //     embeddings: [],
+      //     visibleTo: [],
+      //     description
+      // });
+      // await picture.save();
+      // console.log(picture);
+
+      // // 3. Update group gallery immediately
+      // group.gallery.push(picture._id);
+      // await group.save();
+
+      // // 4. Send quick response
+      res.status(201).json({ success: true, message: "Image uploaded successfully" });
+
+      // // 5. Process embeddings and visibility in the background
+      // processEmbeddingsAndVisibility(picture._id, tempFilePath, group.members)
+      //     .catch(error => console.error("Background processing failed:", error));
+
+  } catch (error) {
+      // Cleanup temp file on error
+      if (tempFilePath && fs.existsSync(tempFilePath)) {
+          fs.unlinkSync(tempFilePath);
       }
       res.status(400).json({ success: false, message: error.message });
-    }
-  };
+  }
+};
+
+// Background processing function
+async function processEmbeddingsAndVisibility(pictureId, filePath, memberIds) {
+  try {
+      // Generate embeddings via Python service
+      const formData = new FormData();
+      formData.append("image", fs.createReadStream(filePath));
+      const embeddingRes = await axios.post(
+          "http://127.0.0.1:8000/make-multiple-embeddings",
+          formData,
+          { headers: formData.getHeaders() }
+      );
+
+      const embeddings = embeddingRes.data.embedding;
+      if (!embeddings?.length) throw new Error("Face detection failed");
+
+      // Compare with members' embeddings
+      const members = await User.find({ _id: { $in: memberIds } });
+      const visibleTo = await Promise.all(
+          members.map(async (member) => 
+              (await compareEmbeddings(member.faceEmbedding, embeddings)) ? member._id : null
+          )
+      ).then(results => results.filter(Boolean));
+
+      // Update picture with results
+      await Picture.findByIdAndUpdate(pictureId, { embeddings, visibleTo });
+
+  } catch (error) {
+      console.error("Background processing error:", error);
+
+  } finally {
+      // Cleanup temp file
+      if (filePath && fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  }
+}
 
   
   export const getGroupImages = async (req, res) => {
@@ -152,11 +179,16 @@ export const uploadGroupImage = async (req, res) => {
         return res.status(403).json({ success: false, message: "Not a member" });
       }
   
-      const filtered = group.gallery.filter(image => 
-        image.visibleTo.some(id => id.equals(req.userId))
-      );
+      let images;
+      if (group.creator.equals(req.userId)) {
+        images = group.gallery;
+      } else {
+        images = group.gallery.filter(image => 
+          image.visibleTo.some(id => id.equals(req.userId))
+        );
+      }
   
-      res.status(200).json({ success: true, images: filtered });
+      res.status(200).json({ success: true, images });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "Server error" });

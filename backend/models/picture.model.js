@@ -1,5 +1,6 @@
 // models/picture.model.js
 import mongoose from "mongoose";
+import { type } from "os";
 
 const pictureSchema = new mongoose.Schema({
   url: {
@@ -21,13 +22,15 @@ const pictureSchema = new mongoose.Schema({
   }],
   embedding: {
     type: [[Number]],
+  },
+  description: {
+    type: String,
     required: true
   },
-  group: {
+  peopleDetected: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
-    required: true
-  }
+    ref: 'User'
+  }]
 }, { timestamps: true });
 
 export const Picture = mongoose.model('Picture', pictureSchema);

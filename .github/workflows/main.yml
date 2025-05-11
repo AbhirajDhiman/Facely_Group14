@@ -1,0 +1,45 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      # Backend 
+      - name: 📦 Install backend dependencies
+        run: npm install
+
+      - name: ✅ Run backend tests
+        run: npm test
+
+      # ======================
+      # Frontend (React)
+      # ======================
+      - name: 📦 Install frontend dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: 🛠️ Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: ✅ Run frontend tests
+        working-directory: ./frontend
+        run: npm test

@@ -1,4 +1,3 @@
-
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '../config/config';
@@ -26,6 +25,7 @@ interface GroupContextType {
   createdGroups: Group[];
   joinedGroups: Group[];
   currentGroup: Group | null;
+  isCreator: boolean;
   loading: boolean;
   fetchMyGroups: () => Promise<void>;
   createGroup: (name: string) => Promise<void>;
@@ -42,14 +42,14 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
   const [createdGroups, setCreatedGroups] = useState<Group[]>([]);
   const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
+  const [isCreator, setIsCreator] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
 
   const fetchMyGroups = async () => {
     if (!isAuthenticated) return;
-    
     try {
       setLoading(true);
       const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.GROUP.MY_GROUPS}`);
@@ -166,6 +166,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
       if (res.data.success) {
         console.log("res.data.group", res.data.group);
         setCurrentGroup(res.data.group);
+        setIsCreator(res.data.group.creator._id === user?._id);
       }
       return res.data;
     } catch (error: any) {
@@ -192,6 +193,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
         createdGroups,
         joinedGroups,
         currentGroup,
+        isCreator,
         loading,
         fetchMyGroups,
         createGroup,
@@ -214,3 +216,4 @@ export const useGroup = () => {
   }
   return context;
 };
+

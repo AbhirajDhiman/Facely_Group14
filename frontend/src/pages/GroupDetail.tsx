@@ -27,26 +27,24 @@ const triggerElementClick = (element) => {
 const GroupDetail = () => {
   const { groupId } = useParams();
   const {user} = useAuth();
-  const { currentGroup, getGroupInfo, getGroupImages, uploadGroupImage, loading } = useGroup();
+  const { currentGroup, getGroupInfo, getGroupImages, uploadGroupImage, loading, isCreator } = useGroup();
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
-  const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
     if (groupId) {
       getGroupInfo(groupId);
       fetchImages(groupId);
-      if(currentGroup?.creator?._id === user?._id){
-        setIsCreator(true);
-      }
+      
     }
   }, []);
 
   const fetchImages = async (groupId) => {
     try {
+
       const res = await getGroupImages(groupId);
       if (res.success) {
         setImages(res.images);
@@ -186,15 +184,15 @@ const GroupDetail = () => {
                 />
                 <label className="text-sm">Select All</label>
               </div>
-              <Dialog open={open} onOpenChange={setOpen}>
+              {
+                isCreator&&(
+                  <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                {
-                  isCreator?
+            
                   <Button variant="outline">
                     <ImagePlus className="mr-2 h-4 w-4" /> Upload Image
-                  </Button>:
-                  ""
-                }
+                  </Button>
+                
                   
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
@@ -223,6 +221,9 @@ const GroupDetail = () => {
                   </Button>
                 </DialogContent>
               </Dialog>
+                )
+              }
+              
             </div>
 
             {images.length === 0 ? (

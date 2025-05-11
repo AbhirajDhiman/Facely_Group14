@@ -41,7 +41,8 @@ const Navbar = () => {
   const navLinks = [
     { path: '/', label: 'Home', icon: <Home size={18} /> },
     { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} />, protected: true },
-    { path: '/upload', label: 'Upload', icon: <Upload size={18} />, protected: true }
+    { path: '/upload', label: 'Upload', icon: <Upload size={18} />, protected: true },
+    {path: '/gallery', label: 'Gallery', icon: <Upload size={18} />, protected: true}
   ];
 
   const getInitials = (name: string) => {

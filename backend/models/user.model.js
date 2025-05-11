@@ -40,20 +40,9 @@ const userSchema = mongoose.Schema({
         type: String,
         default : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FUser_%2528computing%2529&psig=AOvVaw3ZPv403QBSL9CVpeA5RMWw&ust=1745563923575000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLiP0r-K8IwDFQAAAAAdAAAAABAE"
     },
-
     gallery: [{
-        url: {
-          type: String,
-          required: true
-        },
-        sizeInMB: {
-          type: Number,
-          required: true
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Picture'
       }],     
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,
