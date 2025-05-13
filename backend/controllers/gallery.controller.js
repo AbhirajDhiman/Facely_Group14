@@ -5,6 +5,7 @@ import { getVisionModel } from "../services/gemini.js";
 import fs from "fs";
 
 
+
 const model = getVisionModel();
 
 
@@ -36,7 +37,6 @@ const uploadPicture = async (req, res) => {
         } else {
             throw new Error("file not found");
         }
-        console.log(pictureUrl);
         const picture = new Picture({
             url: pictureUrl,
             sizeInMB: file.size / (1024 * 1024),
@@ -52,7 +52,6 @@ const uploadPicture = async (req, res) => {
         //     description
         // };
         userExist.gallery.push(picture);
-        console.log(userExist);
         await userExist.save();
 
         res.status(201).json({
@@ -85,5 +84,52 @@ const getMyGallery = async (req, res) => {
     });
 }
 
-export { uploadPicture, getMyGallery };
+const filterPhotos = async (req, res) => {
+    const { photos, query } = req.body;
+
+    try {
+        const result = await model.generateContent([
+            {
+                text: `You are a filtering assistant. Given a JSON array of photo objects and a search query, return a filtered array of only the photos that match the query. 
+Each photo object looks like this: ${JSON.stringify(photos[0])}. 
+Photos: ${JSON.stringify(photos)}, Query: "${query}". 
+Respond ONLY with a raw JSON array of matching photo objects. Do not include any markdown formatting, code blocks, or extra text.`
+            }
+        ]);
+
+        const response = await result.response;
+        const rawText = await response.text();
+        
+        // Remove any markdown code block formatting if present
+        const cleanText = rawText.replace(/```json\n?|\n?```/g, '').trim();
+
+        let filteredPhotos;
+        try {
+            filteredPhotos = JSON.parse(cleanText);
+            if (!Array.isArray(filteredPhotos)) {
+                throw new Error("Response is not an array");
+            }
+        } catch (err) {
+            console.error("Invalid JSON or format:", rawText);
+            return res.status(400).json({
+                success: false,
+                message: "Invalid response format from model"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            filteredPhotos
+        });
+    } catch (error) {
+        console.error("Error filtering photos:", error);
+        res.status(400).json({
+            success: false,
+            message: "Failed to filter photos"
+        });
+    }
+};
+
+
+export { uploadPicture, getMyGallery, filterPhotos };
 

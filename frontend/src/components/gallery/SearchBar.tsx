@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Sparkles, Mic, Stars, Palette, Wand2, Search } from 'lucide-react';
 import wooshSound from '../../assets/sounds/woosh-230554.mp3';
 import VoiceSearchModal from './VoiceSearchModal';
+import { useGallery } from '@/context/GalleryContext';
 
 interface SearchBarProps {
     searchQuery: string;
@@ -20,6 +21,7 @@ const SearchBar = ({
 }: SearchBarProps) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+    const { filterPhotos } = useGallery();
 
     useEffect(() => {
         audioRef.current = new Audio(wooshSound);
@@ -35,9 +37,9 @@ const SearchBar = ({
         onSearchFocus(true);
         if (audioRef.current) {
             audioRef.current.currentTime = 0;
-            // audioRef.current.play().catch(error => {
-            //     console.warn('Audio playback failed:', error);
-            // });
+            audioRef.current.play().catch(error => {
+                console.warn('Audio playback failed:', error);
+            });
         }
     };
 
@@ -52,8 +54,12 @@ const SearchBar = ({
 
     const handleSearch = () => {
         const description = searchQuery.trim();
-        if (description && onSearch) {
-            onSearch(description);
+        if (description) {
+            if (onSearch) {
+                onSearch(description);
+            } else {
+                filterPhotos(description);
+            }
         }
     };
 
@@ -193,4 +199,4 @@ const SearchBar = ({
     );
 };
 
-export default SearchBar; 
+export default SearchBar;

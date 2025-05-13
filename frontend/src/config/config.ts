@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
     UPLOAD_IMAGE: '/group/groupId/upload',
     GET_IMAGES: '/group/groupId/images',
     GET_INFO: '/group/groupId/info',
-    MY_GROUPS: '/group/my-groups'
+    MY_GROUPS: '/group/my-groups',
+    GET_MEMBERS: '/group/groupId/members'
   }
 };

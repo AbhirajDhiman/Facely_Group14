@@ -22,7 +22,6 @@ const generateInviteCode = async () => {
 };
 
 export const createGroup = async (req, res) => {
-    console.log("aagya")
     const inviteCode = await generateInviteCode();
   try {
     const group = new Group({
@@ -38,7 +37,6 @@ export const createGroup = async (req, res) => {
     await user.save();
     res.status(200).json({ success: true, group, ok:true, inviteCode });
   } catch (error) {
-    console.log(error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -59,75 +57,106 @@ export const joinGroup = async (req, res) => {
     await user.save();
     res.status(200).json({ success: true, group });
   } catch (error) {
-    console.log(error.message)
     res.status(400).json({ success: false, message: error.message });
   }
 };
 
 export const uploadGroupImage = async (req, res) => {
-  let tempFilePath = req.file?.path;
+  let tempFilePaths = (req.files || []).map(f => f.path);
 
   try {
-      const group = await Group.findById(req.params.groupId);
-      if (group.creator.toString() !== req.userId) {
-          throw new Error("Not a group creator");
-      }
-      const imageData = fs.readFileSync(tempFilePath).toString("base64");
+    const group = await Group.findById(req.params.groupId);
+    if (group.creator.toString() !== req.userId) {
+      throw new Error("Not a group creator");
+    }
+    if (!req.files || req.files.length === 0) {
+      throw new Error("No files uploaded");
+    }
 
-      const result = await model.generateContent([
-          { text: "Give a brief 20 to 30 word description of what is shown or said in this image." },
-          {
+    // 1. Upload all images to Cloudinary in parallel
+    const uploadResults = await Promise.all(
+      req.files.map(async (file) => {
+        const url = await uploadToCloudinary(file.path);
+        return {
+          url,
+          sizeInMB: file.size / (1024 * 1024),
+          localPath: file.path,
+          originalName: file.originalname,
+        };
+      })
+    );
+
+    // 2. Create Picture docs with placeholder description
+    const pictures = await Promise.all(
+      uploadResults.map(async (result) => {
+        const picture = new Picture({
+          url: result.url,
+          sizeInMB: result.sizeInMB,
+          uploadedBy: req.userId,
+          group: group._id,
+          description: "Generating..."
+        });
+        await picture.save();
+        group.gallery.push(picture._id);
+        return picture;
+      })
+    );
+    await group.save();
+
+    // 3. Respond immediately with uploaded image info
+    res.status(201).json({
+      success: true,
+      message: "Images uploaded successfully",
+      images: pictures.map(p => ({
+        _id: p._id,
+        url: p.url,
+        sizeInMB: p.sizeInMB,
+        description: p.description,
+      }))
+    });
+
+    // 4. Background: generate description and trigger embeddings/visibility for each image
+    Promise.all(
+      req.files.map(async (file, idx) => {
+        try {
+          const imageData = fs.readFileSync(file.path).toString("base64");
+          const result = await model.generateContent([
+            { text: "Give a brief 20 to 30 word description of what is shown or said in this image." },
+            {
               inlineData: {
-                  mimeType: "image/jpeg",
-                  data: imageData,
+                mimeType: "image/jpeg",
+                data: imageData,
               },
-          },
-      ]);
-
-      const response = await result.response;
-      const description = response.text();
-      console.log(description);
-
-      // 1. Upload to Cloudinary
-      // const imageUrl = await uploadToCloudinary(tempFilePath);
-
-      // 2. Create initial Picture document without embeddings/visibility
-      // const picture = new Picture({
-      //     url: imageUrl,
-      //     sizeInMB: req.file.size / (1024 * 1024),
-      //     uploadedBy: req.userId,
-      //     group: group._id,
-      //     embeddings: [],
-      //     visibleTo: [],
-      //     description
-      // });
-      // await picture.save();
-      // console.log(picture);
-
-      // // 3. Update group gallery immediately
-      // group.gallery.push(picture._id);
-      // await group.save();
-
-      // // 4. Send quick response
-      res.status(201).json({ success: true, message: "Image uploaded successfully" });
-
-      // // 5. Process embeddings and visibility in the background
-      // processEmbeddingsAndVisibility(picture._id, tempFilePath, group.members)
-      //     .catch(error => console.error("Background processing failed:", error));
+            },
+          ]);
+          const response = await result.response;
+          const description = response.text();
+          await Picture.findByIdAndUpdate(pictures[idx]._id, { description });
+          await processEmbeddingsAndVisibility(pictures[idx]._id, file.path, group.members);
+        } catch (err) {
+          console.error("Description/embeddings failed for image", file.path, err);
+        } finally {
+          if (file.path && fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+          }
+        }
+      })
+    );
 
   } catch (error) {
-      // Cleanup temp file on error
-      if (tempFilePath && fs.existsSync(tempFilePath)) {
-          fs.unlinkSync(tempFilePath);
-      }
-      res.status(400).json({ success: false, message: error.message });
+    // Cleanup all temp files on error
+    if (tempFilePaths && tempFilePaths.length) {
+      tempFilePaths.forEach(path => {
+        if (path && fs.existsSync(path)) fs.unlinkSync(path);
+      });
+    }
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
 // Background processing function
 async function processEmbeddingsAndVisibility(pictureId, filePath, memberIds) {
   try {
-      // Generate embeddings via Python service
       const formData = new FormData();
       formData.append("image", fs.createReadStream(filePath));
       const embeddingRes = await axios.post(
@@ -141,20 +170,26 @@ async function processEmbeddingsAndVisibility(pictureId, filePath, memberIds) {
 
       // Compare with members' embeddings
       const members = await User.find({ _id: { $in: memberIds } });
-      const visibleTo = await Promise.all(
-          members.map(async (member) => 
-              (await compareEmbeddings(member.faceEmbedding, embeddings)) ? member._id : null
-          )
-      ).then(results => results.filter(Boolean));
+      const visibleTo = [];
+      for (const member of members) {
+        const isMatch = await compareEmbeddings(member.faceEmbedding, embeddings);
+        if (isMatch) {
+          visibleTo.push(member._id);
+          // Add to user's gallery if not already present
+          if (!member.gallery.includes(pictureId)) {
+            member.gallery.push(pictureId);
+            await member.save();
+          }
+        }
+      }
 
       // Update picture with results
       await Picture.findByIdAndUpdate(pictureId, { embeddings, visibleTo });
 
   } catch (error) {
-      console.error("Background processing error:", error);
+      console.error("Background processing error:", error.message);
 
   } finally {
-      // Cleanup temp file
       if (filePath && fs.existsSync(filePath)) fs.unlinkSync(filePath);
   }
 }
@@ -190,7 +225,6 @@ async function processEmbeddingsAndVisibility(pictureId, filePath, memberIds) {
   
       res.status(200).json({ success: true, images });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ success: false, message: "Server error" });
     }
   };
@@ -206,3 +240,15 @@ export const getMetaData = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+
+export const getGroupMembers = async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.groupId)
+      .populate("members", "name profilePic");
+
+    res.status(200).json({ success: true, members: group.members });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+

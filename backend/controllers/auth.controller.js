@@ -16,10 +16,8 @@ const signup = async (req, res) => {
       if (!name || !email || !password) {
         throw new Error("All fields are required");
       }
-      console.log(req.file);
   
       const userExist = await User.findOne({ email });
-      console.log(userExist);
       if (userExist) throw new Error("User already exists");
   
       if (!req.file) throw new Error("Profile picture required");
@@ -37,7 +35,6 @@ const signup = async (req, res) => {
               }
 
             const profilePicUrl = await uploadToCloudinary(req.file.path);
-            console.log(profilePicUrl);
   
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
@@ -56,7 +53,6 @@ const signup = async (req, res) => {
       generateTokenAndSetCookie(res, user._id);
       await sendVerificationEmail(user.email, verificationToken);
   
-      console.log("DOne bhaji");
       res.status(201).json({
         success: true,
         message: "User created successfully",
@@ -102,7 +98,6 @@ const verifyEmail = async (req, res) => {
 }
 
 const signin = async (req, res) => {
-    console.log("first")
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
@@ -114,8 +109,6 @@ const signin = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid credentials' });
         }
         generateTokenAndSetCookie(res, user._id);
-
-
 
         user.lastLogin = new Date();
         await user.save();
@@ -138,9 +131,7 @@ const signout = async (req, res) => {
     res.status(200).json({ success: true, message: 'Signout successfully' });
 }
 
-
 const forgotPassword = async (req, res) => {
-
     const { email } = req.body;
 
     try {
@@ -220,8 +211,6 @@ const checkAuth = async (req, res) => {
         res.status(401).json({ success: false, message: 'Access denied' });
     }
 }
-
-// 
 
 const resendVerificationEmail = async (req, res) => {
     try {

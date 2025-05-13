@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Image as ImageIcon, Loader2 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -24,7 +25,19 @@ const GalleryPage = () => {
         saveEdits,
         applyAiEnhancement,
         applyAiStyleTransfer,
+        filterPhotos,
     } = useGallery();
+    
+    const [isSearching, setIsSearching] = useState(false);
+
+    const handleSearch = async (query: string) => {
+        setIsSearching(true);
+        try {
+            await filterPhotos(query);
+        } finally {
+            setIsSearching(false);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -66,6 +79,7 @@ const GalleryPage = () => {
                 <SearchBar
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
+                    onSearch={handleSearch}
                     isSearchFocused={isSearchFocused}
                     onSearchFocus={setIsSearchFocused}
                 />
@@ -75,6 +89,33 @@ const GalleryPage = () => {
                     onPhotoClick={setSelectedPhoto}
                     onDownload={handleDownload}
                 />
+
+                {/* Full-screen search loader */}
+                {isSearching && (
+                    <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center backdrop-blur-sm">
+                        <div className="flex flex-col items-center gap-6">
+                            <div className="relative w-32 h-32">
+                                {/* Rotating outer circle */}
+                                <div className="absolute inset-0 border-4 border-t-transparent border-primary rounded-full animate-spin"></div>
+                                
+                                {/* Animated bubbles */}
+                                {[...Array(12)].map((_, index) => (
+                                    <div
+                                        key={index}
+                                        className="absolute w-3 h-3 bg-primary rounded-full animate-bubble"
+                                        style={{
+                                            left: `${Math.cos((index * 30 * Math.PI) / 180) * 50}px`,
+                                            top: `${Math.sin((index * 30 * Math.PI) / 180) * 50}px`,
+                                            animationDelay: `${index * 0.1}s`,
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <p className="text-white text-xl font-medium">Searching your photos...</p>
+                            <p className="text-white/70 text-sm">This may take a few moments</p>
+                        </div>
+                    </div>
+                )}
 
                 {/* Edit Modal */}
                 <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>

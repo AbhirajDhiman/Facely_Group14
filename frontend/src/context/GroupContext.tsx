@@ -21,6 +21,12 @@ interface Group {
   gallery: string[];
 }
 
+interface User {
+  _id: string;
+  name: string;
+  profilePic: string;
+}
+
 interface GroupContextType {
   createdGroups: Group[];
   joinedGroups: Group[];
@@ -34,7 +40,8 @@ interface GroupContextType {
   getGroupImages: (groupId: string) => Promise<any>;
   getGroupInfo: (groupId: string) => Promise<void>;
   setCurrentGroup: (group: Group | null) => void;
-}
+  groupMembers: User[];
+  }
 
 const GroupContext = createContext<GroupContextType | undefined>(undefined);
 
@@ -44,6 +51,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const [isCreator, setIsCreator] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [groupMembers, setGroupMembers] = useState<User[]>([]);
   
   const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
@@ -54,8 +62,6 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.GROUP.MY_GROUPS}`);
       if (res.data.success) {
-        console.log("res.data.createdGroups", res.data.createdGroups);
-        console.log("res.data.joinedGroups", res.data.joinedGroups);
         setCreatedGroups(res.data.createdGroups);
         setJoinedGroups(res.data.joinedGroups);
       }
@@ -164,7 +170,6 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
       const url = `${API_BASE_URL}${API_ENDPOINTS.GROUP.GET_INFO.replace('groupId', groupId)}`;
       const res = await axios.get(url);
       if (res.data.success) {
-        console.log("res.data.group", res.data.group);
         setCurrentGroup(res.data.group);
         setIsCreator(res.data.group.creator._id === user?._id);
       }
@@ -180,10 +185,29 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
-
+  
+  const getGroupMembers = async (groupId: string) => {
+    try {
+      setLoading(true);
+      const url = `${API_BASE_URL}${API_ENDPOINTS.GROUP.GET_MEMBERS.replace('groupId', groupId)}`;
+      const res = await axios.get(url);
+      if(res.data.success) {
+        setGroupMembers(res.data.members);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Failed to fetch group members",
+        description: error.response?.data?.message || "Something went wrong",
+        variant: "destructive",
+      });
+    }
+  }
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchMyGroups();
+    if (isAuthenticated) {  
+      fetchMyGroups().then(() => {
+        if(currentGroup) getGroupMembers(currentGroup._id);
+
+      });
     }
   }, [isAuthenticated]);
 
@@ -201,7 +225,8 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
         uploadGroupImage,
         getGroupImages,
         getGroupInfo,
-        setCurrentGroup
+        setCurrentGroup,
+        groupMembers
       }}
     >
       {children}

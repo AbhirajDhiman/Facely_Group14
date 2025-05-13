@@ -14,7 +14,6 @@ export const compareEmbeddings = async (storedEmbeddings, newEmbeddings, thresho
     for (const incoming of newEmbeddings) {
       const similarity = cosineSimilarity(stored, incoming);
       const distance = 1 - similarity;
-      console.log("Distance",distance);
 
       if (distance < threshold) {
         return true; // ✅ Match found

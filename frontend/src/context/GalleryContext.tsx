@@ -50,6 +50,7 @@ interface GalleryContextType {
     applyAiEnhancement: () => Promise<void>;
     applyAiStyleTransfer: (style: string) => Promise<void>;
     refreshGallery: () => Promise<void>;
+    filterPhotos: (query: string) => Promise<void>;
 }
 
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
@@ -148,6 +149,16 @@ export function GalleryProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const filterPhotos = async (query: string)=>{
+        try{
+            const response = await axios.post('http://localhost:5001/api/gallery/filter-photos', {photos, query})
+            setPhotos(response.data.filteredPhotos);
+        }catch(error){
+            console.error(error);
+            toast.error("Failed to filter photos");
+        }
+    }
+
     const value = {
         photos,
         selectedPhoto,
@@ -165,6 +176,7 @@ export function GalleryProvider({ children }: { children: ReactNode }) {
         applyAiEnhancement,
         applyAiStyleTransfer,
         refreshGallery,
+        filterPhotos,
     };
 
     return (

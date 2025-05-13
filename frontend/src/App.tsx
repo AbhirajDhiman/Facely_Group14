@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { GroupProvider } from "./context/GroupContext";
 import { GalleryProvider } from './context/GalleryContext';
+import AiFacelyChatbot from './components/chatbot/AiFacelyChatbot';
 
 // Pages
 import Home from "./pages/Home";
@@ -21,6 +22,7 @@ import Preview from "./pages/Preview";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import GalleryPage from "./pages/Gallery";
+import ProfilePage from './pages/ProfilePage';
 
 const queryClient = new QueryClient();
 
@@ -46,8 +48,10 @@ const App = () => (
                 <Route path="/preview" element={<Preview />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/gallery" element={<GalleryPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <AiFacelyChatbot />
             </BrowserRouter>
           </TooltipProvider>
         </GalleryProvider>

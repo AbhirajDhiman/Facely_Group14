@@ -10,7 +10,6 @@ import { connectDB } from './DB/connectdb.js';
 import authRoutes from './routes/auth.routes.js';
 import galleryRoutes from './routes/gallery.routes.js';
 import groupRoutes from './routes/group.routes.js';
-import aiRoutes from "./routes/gemini.routes.js"
 
 // ESM dirname configuration
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +31,6 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/group", groupRoutes);
-app.use('/api/ai', aiRoutes);
 
 // Production configuration
 if (process.env.NODE_ENV === 'production') {

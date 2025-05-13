@@ -1,4 +1,3 @@
-
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '../config/config';
@@ -45,11 +44,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH.CHECK_AUTH}`);
         if (res.data.success) {
           setUser(res.data.user);
-          console.log("user", res.data.user);
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.log('Not authenticated');
+        console.log("error", error.message);
       } finally {
         setLoading(false);
       }
