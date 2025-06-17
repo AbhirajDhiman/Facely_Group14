@@ -78,6 +78,7 @@ export function GalleryProvider({ children }: { children: ReactNode }) {
             setIsLoading(true);
             const response = await axios.get("http://localhost:5001/api/gallery/gallery-pictures");
             setPhotos(response.data.gallery);
+            console.log("photos", photos);
         } catch (error) {
             console.error(error);
             toast.error("Failed to load gallery photos");
@@ -152,6 +153,7 @@ export function GalleryProvider({ children }: { children: ReactNode }) {
     const filterPhotos = async (query: string)=>{
         try{
             const response = await axios.post('http://localhost:5001/api/gallery/filter-photos', {photos, query})
+            console.log("response", response.data);
             setPhotos(response.data.filteredPhotos);
         }catch(error){
             console.error(error);

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '../config/config';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useParams } from 'react-router-dom';
+
 
 interface Group {
   _id: string;
@@ -52,7 +54,6 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
   const [isCreator, setIsCreator] = useState(false);
   const [loading, setLoading] = useState(false);
   const [groupMembers, setGroupMembers] = useState<User[]>([]);
-  
   const { isAuthenticated, user } = useAuth();
   const { toast } = useToast();
 
@@ -193,6 +194,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
       const res = await axios.get(url);
       if(res.data.success) {
         setGroupMembers(res.data.members);
+        console.log("groupMembers", groupMembers);
       }
     } catch (error: any) {
       toast({
@@ -201,15 +203,20 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
         variant: "destructive",
       });
     }
-  }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {  
-      fetchMyGroups().then(() => {
-        if(currentGroup) getGroupMembers(currentGroup._id);
-
-      });
+      fetchMyGroups();
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (currentGroup && currentGroup._id) {
+      getGroupMembers(currentGroup._id);
+      console.log(groupMembers);
+    }
+  }, [currentGroup]);
 
   return (
     <GroupContext.Provider
@@ -226,7 +233,8 @@ export const GroupProvider = ({ children }: { children: ReactNode }) => {
         getGroupImages,
         getGroupInfo,
         setCurrentGroup,
-        groupMembers
+        groupMembers,
+
       }}
     >
       {children}

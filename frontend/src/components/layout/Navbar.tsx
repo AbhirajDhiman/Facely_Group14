@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, User, Upload, Home, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, User, Upload, Home, LayoutDashboard, Camera } from 'lucide-react';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -42,7 +42,8 @@ const Navbar = () => {
     { path: '/', label: 'Home', icon: <Home size={18} /> },
     { path: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} />, protected: true },
     { path: '/upload', label: 'Upload', icon: <Upload size={18} />, protected: true },
-    {path: '/gallery', label: 'Gallery', icon: <Upload size={18} />, protected: true}
+    {path: '/gallery', label: 'Gallery', icon: <Upload size={18} />, protected: true},
+    {path: '/media', label: 'Media', icon: <Camera size={18} />, protected: true}
   ];
 
   const getInitials = (name: string) => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { API_BASE_URL, API_ENDPOINTS } from '../config/config';
 import { useToast } from '@/components/ui/use-toast';
 
-interface User {
+export interface User {
   _id: string;
   name: string;
   email: string;
@@ -44,10 +44,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await axios.get(`${API_BASE_URL}${API_ENDPOINTS.AUTH.CHECK_AUTH}`);
         if (res.data.success) {
           setUser(res.data.user);
+          console.log("user", res.data.user);
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.log("error", error.message);
+        console.log('Not authenticated');
       } finally {
         setLoading(false);
       }
@@ -58,7 +59,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}${API_ENDPOINTS.AUTH.SIGNIN}`, { email, password });
+      const res = await axios.post(`${API_BASE_URL}${API_ENDPOINTS.AUTH.SIGNIN}`, { email, password }, {
+        withCredentials: true,
+      });
       if (res.data.success) {
         setUser(res.data.user);
         setIsAuthenticated(true);

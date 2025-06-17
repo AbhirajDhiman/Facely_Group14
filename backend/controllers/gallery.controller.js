@@ -37,6 +37,7 @@ const uploadPicture = async (req, res) => {
         } else {
             throw new Error("file not found");
         }
+        console.log(pictureUrl);
         const picture = new Picture({
             url: pictureUrl,
             sizeInMB: file.size / (1024 * 1024),
@@ -52,6 +53,7 @@ const uploadPicture = async (req, res) => {
         //     description
         // };
         userExist.gallery.push(picture);
+        console.log(userExist);
         await userExist.save();
 
         res.status(201).json({
@@ -86,9 +88,11 @@ const getMyGallery = async (req, res) => {
 
 const filterPhotos = async (req, res) => {
     const { photos, query } = req.body;
+    console.log("photos", photos);
+    console.log("query", query);
 
     try {
-        const result = await model.generateContent([
+    const result = await model.generateContent([
             {
                 text: `You are a filtering assistant. Given a JSON array of photo objects and a search query, return a filtered array of only the photos that match the query. 
 Each photo object looks like this: ${JSON.stringify(photos[0])}. 
@@ -97,7 +101,7 @@ Respond ONLY with a raw JSON array of matching photo objects. Do not include any
             }
         ]);
 
-        const response = await result.response;
+    const response = await result.response;
         const rawText = await response.text();
         
         // Remove any markdown code block formatting if present
@@ -117,10 +121,10 @@ Respond ONLY with a raw JSON array of matching photo objects. Do not include any
             });
         }
 
-        res.status(200).json({
-            success: true,
-            filteredPhotos
-        });
+    res.status(200).json({
+        success: true,
+        filteredPhotos
+    });
     } catch (error) {
         console.error("Error filtering photos:", error);
         res.status(400).json({

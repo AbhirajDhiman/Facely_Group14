@@ -22,6 +22,7 @@ const generateInviteCode = async () => {
 };
 
 export const createGroup = async (req, res) => {
+    console.log("aagya")
     const inviteCode = await generateInviteCode();
   try {
     const group = new Group({
@@ -37,6 +38,7 @@ export const createGroup = async (req, res) => {
     await user.save();
     res.status(200).json({ success: true, group, ok:true, inviteCode });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -57,6 +59,7 @@ export const joinGroup = async (req, res) => {
     await user.save();
     res.status(200).json({ success: true, group });
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -131,6 +134,7 @@ export const uploadGroupImage = async (req, res) => {
           ]);
           const response = await result.response;
           const description = response.text();
+          console.log(description)
           await Picture.findByIdAndUpdate(pictures[idx]._id, { description });
           await processEmbeddingsAndVisibility(pictures[idx]._id, file.path, group.members);
         } catch (err) {
@@ -225,6 +229,7 @@ async function processEmbeddingsAndVisibility(pictureId, filePath, memberIds) {
   
       res.status(200).json({ success: true, images });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ success: false, message: "Server error" });
     }
   };

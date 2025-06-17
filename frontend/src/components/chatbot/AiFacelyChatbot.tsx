@@ -6,23 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import axios from 'axios';
 
-// Placeholder for Gemini API call - replace with your actual implementation
-// const askGeminiForNavigation = async (command: string, currentPath: string, availableRoutes: string[]): Promise<{ route?: string; reply: string }> => {
-//     console.log('Sending to Gemini:', { command, currentPath, availableRoutes });
-//     // Simulate API call
-//     await new Promise(resolve => setTimeout(resolve, 1500));
-//     if (command.toLowerCase().includes('gallery')) {
-//         return { route: '/gallery', reply: 'Okay, taking you to the gallery!' };
-//     }
-//     if (command.toLowerCase().includes('profile')) {
-//         return { route: '/profile', reply: 'Sure, let\'s go to your profile.' };
-//     }
-//     if (command.toLowerCase().includes('dashboard')) {
-//         return { route: '/dashboard', reply: 'Navigating to your dashboard.' };
-//     }
-//     return { reply: 'I\'m not sure how to help with that yet, but I\'m learning!' };
-// };
 
 
 interface Message {
@@ -44,7 +29,14 @@ const AiFacelyChatbot = () => {
     const location = useLocation();
 
     // Define available routes for navigation commands
-    const availableRoutes = ['/', '/signin', '/signup', '/verify-email', '/forgot-password', '/reset-password/:token', '/dashboard', '/group/:groupId', '/upload', '/preview', '/contact', '/gallery', '/profile'];
+    const availableRoutes = [
+      { path: '/dashboard', name: 'Dashboard', description: 'Main dashboard or home screen' },
+      { path: '/profile', name: 'Profile', description: 'User profile page' },
+      { path: '/gallery', name: 'Gallery', description: 'Photo gallery' },
+      { path: '/groups', name: 'Groups', description: 'List of groups' },
+      // Add more routes here as your application grows
+      // Example: { path: '/settings', name: 'Settings', description: 'Application settings' }
+    ];
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -85,25 +77,34 @@ const AiFacelyChatbot = () => {
         try {
             // const { route, reply } = await askGeminiForNavigation(trimmedInput, location.pathname, availableRoutes);
             // For now, using a placeholder for Gemini response
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-            let reply = 'I am still under development. Navigation commands will be active soon!';
-            let route: string | undefined = undefined;
+            // await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+            // let reply = 'I am still under development. Navigation commands will be active soon!';
+            // let route: string | undefined = undefined;
 
-            const command = trimmedInput.toLowerCase();
-            if (command.includes('gallery') || command.includes('show photos')) {
-                route = '/gallery';
-                reply = 'Okay, navigating to your photo gallery!';
-            } else if (command.includes('profile') || command.includes('my page')) {
-                route = '/profile';
-                reply = 'Sure, heading to your profile page.';
-            } else if (command.includes('dashboard') || command.includes('home screen')) {
-                route = '/dashboard';
-                reply = 'Alright, taking you to the dashboard.';
-            } else if (command.includes('upload') || command.includes('add new pictures')) {
-                 route = '/upload';
-                reply = 'Let\'s go to the upload page!';
-            }
+            // const command = trimmedInput.toLowerCase();
+            // if (command.includes('gallery') || command.includes('show photos')) {
+            //     route = '/gallery';
+            //     reply = 'Okay, navigating to your photo gallery!';
+            // } else if (command.includes('profile') || command.includes('my page')) {
+            //     route = '/profile';
+            //     reply = 'Sure, heading to your profile page.';
+            // } else if (command.includes('dashboard') || command.includes('home screen')) {
+            //     route = '/dashboard';
+            //     reply = 'Alright, taking you to the dashboard.';
+            // } else if (command.includes('upload') || command.includes('add new pictures')) {
+            //      route = '/upload';
+            //     reply = 'Let's go to the upload page!';
+            // }
+            console.log(trimmedInput);
+            const response = await axios.post('http://localhost:5001/api/gemini/chatbot', {
+                query: trimmedInput,
+            });
+            
 
+            const { reply, route } = response.data.response;
+            console.log(response.data.response);
+            console.log(reply);
+            console.log(route);
 
             const aiResponse: Message = {
                 id: `ai-${Date.now()}`,
@@ -120,9 +121,13 @@ const AiFacelyChatbot = () => {
             }
         } catch (error) {
             console.error('Error processing command:', error);
+            let errorMessage = 'Sorry, I encountered an error. Please try again.';
+            if (axios.isAxiosError(error) && error.response) {
+                errorMessage = error.response.data.message || errorMessage;
+            }
             const errorResponse: Message = {
                 id: `ai-error-${Date.now()}`,
-                text: 'Sorry, I encountered an error. Please try again.',
+                text: errorMessage,
                 sender: 'ai',
                 timestamp: new Date(),
             };
@@ -281,6 +286,9 @@ const AiFacelyChatbot = () => {
                                 </form>
                                  <p className="text-xs text-muted-foreground mt-2 text-center">
                                     Example: "Go to gallery" or "Show my profile"
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1 text-center">
+                                  Current Path: {location.pathname}
                                 </p>
                             </div>
                         </Card>
